@@ -1,38 +1,38 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #8B5CF6; /* Violet */
   --color-primary-hover: #7C3AED;
   --color-secondary: #F97316; /* Orange */
   --color-secondary-hover: #EA580C;
 
-  --color-background: #09090b; /* Very dark zinc */
-  --color-foreground: #FAFAFA;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   
-  --color-card: #18181b;
-  --color-card-border: #27272a;
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
 
-  --color-muted: #a1a1aa;
+  --color-muted: var(--muted);
 }
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #09090b;
+    --background: #f4f4f5; /* zinc-100 */
+    --foreground: #09090b; /* zinc-950 */
     --card: #ffffff;
-    --card-border: #e4e4e7;
-    --muted: #71717a;
+    --card-border: #e4e4e7; /* zinc-200 */
+    --muted: #71717a; /* zinc-500 */
   }
 
   /* Global Dark Mode By Default or handled via dark class */
-  .dark, body {
+  .dark {
     --background: #09090b;
     --foreground: #fafafa;
     --card: #18181b;
     --card-border: #27272a;
     --muted: #a1a1aa;
-    background-color: var(--background);
-    color: var(--foreground);
   }
 }
 

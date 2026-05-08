@@ -1,6 +1,4 @@
 import { ChatMistralAI } from "@langchain/mistralai";
-import { createAgent, toolStrategy } from "langchain";
-import z from "zod";
 import config from "../config/config.js";
 
 // Production ready model configuration with retries and appropriate temperature
@@ -9,11 +7,6 @@ const model = new ChatMistralAI({
   apiKey: config.MISTRAL_API_KEY,
   temperature: 0.7, // Good balance for a conversational chat app
   maxRetries: 3,    // Fault tolerance for API failures
-});
-
-const agent = createAgent({
-  model,
-  tools: [],
 });
 
 const DEFAULT_SYSTEM_PROMPT = {
@@ -38,28 +31,26 @@ export async function getAIResponse({ content, history = [], systemPrompt = null
 
     // 1. Add System Prompt
     if (systemPrompt) {
-      formattedMessages.push({ role: "system", content: systemPrompt });
+      formattedMessages.push(["system", systemPrompt]);
     } else {
-      formattedMessages.push(DEFAULT_SYSTEM_PROMPT);
+      formattedMessages.push(["system", DEFAULT_SYSTEM_PROMPT.content]);
     }
 
     // 2. Add Conversation History (remember previous chats)
     if (Array.isArray(history) && history.length > 0) {
-      formattedMessages.push(...history);
+      history.forEach(msg => {
+        // Map 'ai' to 'assistant' for Langchain
+        const role = msg.role === 'ai' ? 'assistant' : msg.role;
+        formattedMessages.push([role, msg.content]);
+      });
     }
 
     // 3. Add the New User Message
     if (content) {
-      formattedMessages.push({ role: "user", content });
+      formattedMessages.push(["user", content]);
     }
 
-    const stream = await agent.stream(
-      {
-        messages: formattedMessages,
-      },
-      { streamMode: "messages" },
-    );
-
+    const stream = await model.stream(formattedMessages);
     return stream;
   } catch (error) {
     console.error("[AI Service Error] getAIResponse failed:", error.message);
@@ -84,30 +75,13 @@ export async function getTitle({ message }) {
       maxRetries: 2,
     });
 
-    const titleAgent = createAgent({
-      model: titleModel,
-      tools: [],
-      responseFormat: toolStrategy(
-        z.object({
-          chatTitle: z.string().describe("A concise, engaging title (max 5 words) for the given message"),
-        }),
-      ),
-    });
+    const response = await titleModel.invoke([
+      ["system", "You are a helpful assistant that generates concise, engaging titles for chat conversations. Output ONLY the title text, maximum 5 words, without any quotes or prefixes."],
+      ["user", `Generate a title for: "${message}"`]
+    ]);
 
-    const response = await titleAgent.invoke({
-      messages: [
-        {
-          role: "system",
-          content: "You are a helpful assistant that generates concise, engaging titles for chat conversations."
-        },
-        {
-          role: "user",
-          content: `Generate a concise title (maximum 5 words) for this initial chat message: "${message}"`,
-        },
-      ],
-    });
-
-    return response?.structuredResponse || { chatTitle: "New Chat" };
+    const cleanTitle = response.content.replace(/["']/g, "").trim();
+    return { chatTitle: cleanTitle || "New Chat" };
   } catch (error) {
     console.error("[AI Service Error] getTitle failed:", error.message);
     // Fallback instead of breaking the application
