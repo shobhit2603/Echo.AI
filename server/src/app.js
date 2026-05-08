@@ -32,7 +32,12 @@ passport.use(
       callbackURL: config.GOOGLE_CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+      const user = {
+        email: profile.emails?.[0]?.value,
+        name: profile.displayName,
+        profilePicture: profile.photos?.[0]?.value,
+      };
+      return done(null, user);
     },
   ),
 );
