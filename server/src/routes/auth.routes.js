@@ -9,6 +9,7 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const authRouter = Router();
 
+// Google OAuth authentication
 authRouter.get(
   "/google",
   passport.authenticate("google", {
@@ -17,6 +18,7 @@ authRouter.get(
   }),
 );
 
+// Google OAuth callback
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -26,8 +28,10 @@ authRouter.get(
   googleAuthController,
 );
 
+// Get current user
 authRouter.get("/user", authMiddleware, getCurrentUser);
 
+// Logout
 authRouter.post("/logout", authMiddleware, logoutController);
 
 export default authRouter;

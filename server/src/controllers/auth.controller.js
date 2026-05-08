@@ -50,19 +50,8 @@ export const googleAuthController = async (req, res) => {
 
     res.cookie("token", token, cookieOptions);
 
-    // If using passport redirect flow, you might redirect to client url
-    // For REST API, we just return the user and token
-    return res.status(200).json({
-      success: true,
-      message: "Authentication successful",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        profilePicture: user.profilePicture,
-      },
-    });
+    // Redirect the user back to the frontend application
+    return res.redirect(config.CLIENT_URL);
   } catch (error) {
     console.error("Error in googleAuthController:", error);
     return res.status(500).json({

@@ -5,12 +5,16 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import authRouter from "./routes/auth.routes.js";
+import chatRouter from "./routes/chat.routes.js";
 import config from "./config/config.js";
 
 const app = express();
 
 app.use(morgan("dev"));
-app.use(cors());
+app.use(cors({
+  origin: config.CLIENT_URL,
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,5 +39,6 @@ passport.use(
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/chat", chatRouter);
 
 export default app;
