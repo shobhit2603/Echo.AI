@@ -132,7 +132,7 @@ export default function ChatArea() {
 
   // Active Chat State
   return (
-    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 md:p-8 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 md:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <div className="max-w-4xl mx-auto space-y-6 pb-4">
         {currentChat.messages.map((msg, index) => {
           const isUser = msg.role === "user";

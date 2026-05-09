@@ -69,7 +69,7 @@ export default function ChatInput() {
             className={`flex items-center justify-center w-10 h-10 rounded-full transition-all ${
               content.trim() && !isStreaming
                 ? "bg-foreground text-background shadow-md cursor-pointer"
-                : "bg-zinc-200 dark:bg-zinc-700 text-muted cursor-not-allowed"
+                : "bg-zinc-200 dark:bg-zinc-700 text-muted opacity-50 cursor-not-allowed"
             }`}
           >
             {isStreaming ? (

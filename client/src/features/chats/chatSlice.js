@@ -52,6 +52,12 @@ export const chatSlice = createSlice({
         state.currentChat = null;
       }
     },
+    updateCurrentChatMetadata: (state, action) => {
+      if (state.currentChat) {
+        state.currentChat._id = action.payload._id;
+        state.currentChat.title = action.payload.title;
+      }
+    },
   },
 });
 
@@ -66,6 +72,7 @@ export const {
   setIsStreaming,
   addSidebarChatOptimistic,
   removeChatOptimistic,
+  updateCurrentChatMetadata,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

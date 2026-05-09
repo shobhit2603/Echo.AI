@@ -14,6 +14,7 @@ import {
   setIsStreaming,
   addSidebarChatOptimistic,
   removeChatOptimistic,
+  updateCurrentChatMetadata,
 } from "./chatSlice";
 
 export default function useChat() {
@@ -57,8 +58,15 @@ export default function useChat() {
   const sendMessage = useCallback(async (content, chatId = null) => {
     if (!content.trim()) return;
 
-    // 1. If we don't have a currentChat but have a chatId, we shouldn't send until loaded.
-    // However, if we don't have a chatId, it's a new chat.
+    // Optimistically initialize the currentChat if starting a new one
+    // This allows the UI to instantly transition to the ChatArea from the Empty State
+    if (!currentChat && !chatId) {
+      dispatch(setCurrentChat({
+        _id: "temp_" + Date.now(),
+        title: "New Chat...",
+        messages: []
+      }));
+    }
     
     // Optimistically add the user message
     dispatch(addMessageToCurrentChat({ role: "user", content }));
@@ -104,12 +112,8 @@ export default function useChat() {
                 const data = JSON.parse(dataStr);
 
                 if (data.event === "chat_created") {
-                  if (!currentChat) {
-                    dispatch(setCurrentChat({ _id: data.chatId, title: data.title, messages: [
-                      { role: "user", content },
-                      { role: "ai", content: "" }
-                    ]}));
-                  }
+                  // Swap out the temporary ID and title with the real ones from the backend
+                  dispatch(updateCurrentChatMetadata({ _id: data.chatId, title: data.title }));
                   dispatch(addSidebarChatOptimistic({ _id: data.chatId, title: data.title }));
                 } else if (data.event === "message_chunk") {
                   dispatch(appendStreamChunk(data.chunk));

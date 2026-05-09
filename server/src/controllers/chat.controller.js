@@ -43,8 +43,9 @@ export const handleMessage = async (req, res) => {
 
     // Setup SSE Headers for streaming
     res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no'); // Crucial: prevents Next.js proxy and Nginx from buffering the stream chunks
     // Flush headers to establish stream immediately
     res.flushHeaders();
 
