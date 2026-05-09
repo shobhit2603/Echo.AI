@@ -155,7 +155,7 @@ export default function Sidebar() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => setIsOpen(true)}
-            className="absolute top-4 left-4 z-50 p-2.5 bg-card border border-card-border rounded-xl shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-muted hover:text-foreground"
+            className="absolute top-4 left-4 z-50 p-2.5 bg-card border border-card-border rounded-xl shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-muted hover:text-foreground cursor-pointer"
             title="Open Sidebar"
           >
             <List weight="bold" className="w-5 h-5" />
