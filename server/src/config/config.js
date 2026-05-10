@@ -27,6 +27,7 @@ const config = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
+  NODE_ENV: process.env.NODE_ENV || "development",
 };
 
 export default config;

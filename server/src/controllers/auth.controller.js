@@ -116,7 +116,7 @@ export const getCurrentUser = async (req, res) => {
 // logoutController
 export const logoutController = async (req, res) => {
   try {
-    const isProduction = process.env.NODE_ENV === "production" || (process.env.CLIENT_URL && process.env.CLIENT_URL.includes("vercel.app"));
+    const isProduction = config.NODE_ENV === "production" || (config.CLIENT_URL && config.CLIENT_URL.includes("vercel.app"));
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction,
