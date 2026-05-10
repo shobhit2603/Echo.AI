@@ -37,7 +37,7 @@ const hoverScale = {
 export default function AuthPage() {
   const handleGoogleLogin = () => {
     // Navigate directly to the backend OAuth route
-    const API_URL = process.env.SERVER_URL || "http://localhost:5000";
+    const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
     window.location.href = `${API_URL}/api/auth/google`;
   };
 

@@ -1,4 +1,4 @@
-const API_URL = process.env.SERVER_URL || "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
 
 export async function fetchCurrentUser() {
   const res = await fetch(`${API_URL}/api/auth/user`, {
