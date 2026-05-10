@@ -19,7 +19,7 @@ export default function Home() {
       <Sidebar />
 
       {/* Right Section: Chat Interface */}
-      <div className="flex-1 flex flex-col relative">
+      <div className="flex-1 min-w-0 flex flex-col relative">
         <ChatArea />
         <div className="shrink-0 bg-background/80 backdrop-blur-md pt-4">
           <ChatInput />

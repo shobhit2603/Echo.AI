@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Sparkle } from "@phosphor-icons/react";
+import { PentagramIcon } from "@phosphor-icons/react";
 
 export default function LoadingScreen() {
   return (
@@ -17,10 +17,10 @@ export default function LoadingScreen() {
             animate={{ rotate: 360 }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
           >
-            <Sparkle weight="fill" className="text-white h-12 w-12" />
+            <PentagramIcon weight="fill" className="text-white h-12 w-12" />
           </motion.div>
         </motion.div>
-        
+
         <div className="flex flex-col items-center space-y-2">
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
@@ -30,7 +30,7 @@ export default function LoadingScreen() {
           >
             Welcome to Echo.AI
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -40,7 +40,7 @@ export default function LoadingScreen() {
             Initializing your personal workspace...
           </motion.p>
         </div>
-        
+
         <motion.div
           initial={{ opacity: 0, width: 0 }}
           animate={{ opacity: 1, width: "12rem" }}
@@ -51,7 +51,12 @@ export default function LoadingScreen() {
             className="h-full bg-primary rounded-full"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
-            transition={{ duration: 2, delay: 0.6, ease: "easeInOut", repeat: Infinity }}
+            transition={{
+              duration: 2,
+              delay: 0.6,
+              ease: "easeInOut",
+              repeat: Infinity,
+            }}
           />
         </motion.div>
       </div>

@@ -1,7 +1,13 @@
 "use client";
 
 import { motion } from "motion/react";
-import { GoogleLogo, Sparkle, Brain, Compass, PencilCircle } from "@phosphor-icons/react";
+import {
+  GoogleLogo,
+  ShootingStarIcon,
+  Brain,
+  Compass,
+  PencilCircle,
+} from "@phosphor-icons/react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -52,26 +58,43 @@ export default function AuthPage() {
             {/* Minimal pattern instead of heavy gradient */}
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary"/>
+                <pattern
+                  id="grid"
+                  width="40"
+                  height="40"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 40 0 L 0 0 0 40"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    className="text-primary"
+                  />
                 </pattern>
               </defs>
               <rect width="100%" height="100%" fill="url(#grid)" />
             </svg>
           </div>
-          
+
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-primary rounded-2xl">
-                <Sparkle weight="fill" className="text-white h-8 w-8" />
+                <ShootingStarIcon
+                  weight="fill"
+                  className="text-white h-8 w-8"
+                />
               </div>
-              <span className="text-2xl tracking-tight font-medium text-foreground">Echo.AI</span>
+              <span className="text-2xl tracking-tight font-medium text-foreground">
+                Echo.AI
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl tracking-tight text-foreground mb-4 leading-tight">
               Personal AI Assistant
             </h1>
             <p className="text-xl text-muted font-light max-w-lg">
-              Learn, Create, and Explore with an intelligent companion designed to simplify your everyday workflows.
+              Learn, Create, and Explore with an intelligent companion designed
+              to simplify your everyday workflows.
             </p>
           </div>
         </motion.div>
@@ -86,11 +109,18 @@ export default function AuthPage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
             </span>
-            <span className="text-xs font-medium text-secondary tracking-widest uppercase">Ready</span>
+            <span className="text-xs font-medium text-secondary tracking-widest uppercase">
+              Ready
+            </span>
           </div>
-          <h2 className="text-2xl tracking-tight text-foreground mb-2 mt-4">Welcome Back</h2>
-          <p className="text-muted text-sm mb-8 font-light">Sign in to sync your conversations and access your personalized workspace.</p>
-          
+          <h2 className="text-2xl tracking-tight text-foreground mb-2 mt-4">
+            Welcome Back
+          </h2>
+          <p className="text-muted text-sm mb-8 font-light">
+            Sign in to sync your conversations and access your personalized
+            workspace.
+          </p>
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -100,7 +130,7 @@ export default function AuthPage() {
             <GoogleLogo weight="bold" className="h-6 w-6 text-zinc-900" />
             <span className="text-base font-medium">Continue with Google</span>
           </motion.button>
-          
+
           <p className="text-xs text-muted mt-8 font-light">
             By continuing, you agree to our Terms of Service and Privacy Policy.
           </p>
@@ -116,8 +146,12 @@ export default function AuthPage() {
             <Brain weight="duotone" className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h3 className="text-lg text-foreground tracking-tight mb-1">Learn</h3>
-            <p className="text-sm text-muted font-light">Expand your knowledge with intelligent, context-aware answers.</p>
+            <h3 className="text-lg text-foreground tracking-tight mb-1">
+              Learn
+            </h3>
+            <p className="text-sm text-muted font-light">
+              Expand your knowledge with intelligent, context-aware answers.
+            </p>
           </div>
         </motion.div>
 
@@ -131,8 +165,12 @@ export default function AuthPage() {
             <PencilCircle weight="duotone" className="h-6 w-6 text-secondary" />
           </div>
           <div>
-            <h3 className="text-lg text-foreground tracking-tight mb-1">Create</h3>
-            <p className="text-sm text-muted font-light">Generate ideas, draft content, and build faster than ever.</p>
+            <h3 className="text-lg text-foreground tracking-tight mb-1">
+              Create
+            </h3>
+            <p className="text-sm text-muted font-light">
+              Generate ideas, draft content, and build faster than ever.
+            </p>
           </div>
         </motion.div>
 
@@ -142,12 +180,19 @@ export default function AuthPage() {
           whileHover={hoverScale}
           className="md:col-span-4 rounded-3xl bg-card border border-card-border p-6 flex flex-col gap-4 group cursor-pointer"
         >
-          <div className="h-12 w-12 rounded-full bg-zinc-200 flex items-center justify-center group-hover:bg-zinc-300 transition-colors">
-            <Compass weight="duotone" className="h-6 w-6 text-zinc-600" />
+          <div className="h-12 w-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-zinc-300 dark:group-hover:bg-zinc-700 transition-colors">
+            <Compass
+              weight="duotone"
+              className="h-6 w-6 text-zinc-600 dark:text-zinc-400"
+            />
           </div>
           <div>
-            <h3 className="text-lg text-foreground tracking-tight mb-1">Explore</h3>
-            <p className="text-sm text-muted font-light">Navigate through complex topics with an intuitive AI guide.</p>
+            <h3 className="text-lg text-foreground tracking-tight mb-1">
+              Explore
+            </h3>
+            <p className="text-sm text-muted font-light">
+              Navigate through complex topics with an intuitive AI guide.
+            </p>
           </div>
         </motion.div>
       </motion.div>
