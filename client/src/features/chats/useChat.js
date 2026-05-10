@@ -17,6 +17,8 @@ import {
   updateCurrentChatMetadata,
 } from "./chatSlice";
 
+const API_URL = process.env.SERVER_URL || "http://localhost:5000";
+
 export default function useChat() {
   const dispatch = useDispatch();
   const { sidebarChats, currentChat, isSidebarLoading, isChatLoading, isStreaming } = useSelector((state) => state.chat);
@@ -76,7 +78,7 @@ export default function useChat() {
     dispatch(setIsStreaming(true));
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content, chatId }),

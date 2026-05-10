@@ -1,5 +1,7 @@
+const API_URL = process.env.SERVER_URL || "http://localhost:5000";
+
 export async function fetchCurrentUser() {
-  const res = await fetch("/api/auth/user", {
+  const res = await fetch(`${API_URL}/api/auth/user`, {
     method: "GET",
     credentials: "include",
   });
@@ -13,7 +15,7 @@ export async function fetchCurrentUser() {
 }
 
 export async function logoutUser() {
-  const res = await fetch("/api/auth/logout", {
+  const res = await fetch(`${API_URL}/api/auth/logout`, {
     method: "POST",
     credentials: "include",
   });

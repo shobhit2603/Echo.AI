@@ -1,5 +1,7 @@
+const API_URL = process.env.SERVER_URL || "http://localhost:5000";
+
 export async function fetchSidebarChatsApi() {
-  const res = await fetch("/api/chat", {
+  const res = await fetch(`${API_URL}/api/chat`, {
     method: "GET",
     credentials: "include",
   });
@@ -13,7 +15,7 @@ export async function fetchSidebarChatsApi() {
 }
 
 export async function fetchChatHistoryApi(chatId) {
-  const res = await fetch(`/api/chat/${chatId}`, {
+  const res = await fetch(`${API_URL}/api/chat/${chatId}`, {
     method: "GET",
     credentials: "include",
   });
@@ -27,7 +29,7 @@ export async function fetchChatHistoryApi(chatId) {
 }
 
 export async function deleteChatApi(chatId) {
-  const res = await fetch(`/api/chat/${chatId}`, {
+  const res = await fetch(`${API_URL}/api/chat/${chatId}`, {
     method: "DELETE",
     credentials: "include",
   });
