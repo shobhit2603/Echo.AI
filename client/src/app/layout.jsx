@@ -9,6 +9,9 @@ const outfit = Outfit({ subsets: ["latin"] });
 export const metadata = {
   title: "Echo.AI",
   description: "Your Personal AI Assistant - Learn, Create, and Explore",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({ children }) {
