@@ -51,8 +51,10 @@ export const googleAuthController = async (req, res) => {
 
     res.cookie("token", token, cookieOptions);
 
-    // Redirect the user back to the frontend application
-    return res.redirect(config.CLIENT_URL);
+    // Redirect the user back to the frontend application with the token in the URL as a fallback
+    const redirectUrl = new URL(config.CLIENT_URL);
+    redirectUrl.searchParams.set("token", token);
+    return res.redirect(redirectUrl.toString());
   } catch (error) {
     console.error("Error in googleAuthController:", error);
     return res.status(500).json({
@@ -65,7 +67,7 @@ export const googleAuthController = async (req, res) => {
 // getCurrentUser
 export const getCurrentUser = async (req, res) => {
   try {
-    const token = req.cookies?.token;
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({

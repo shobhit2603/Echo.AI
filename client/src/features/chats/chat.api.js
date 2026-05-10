@@ -1,8 +1,10 @@
 const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
 
 export async function fetchSidebarChatsApi() {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const res = await fetch(`${API_URL}/api/chat`, {
     method: "GET",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
     credentials: "include",
   });
 
@@ -15,8 +17,10 @@ export async function fetchSidebarChatsApi() {
 }
 
 export async function fetchChatHistoryApi(chatId) {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const res = await fetch(`${API_URL}/api/chat/${chatId}`, {
     method: "GET",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
     credentials: "include",
   });
 
@@ -29,8 +33,10 @@ export async function fetchChatHistoryApi(chatId) {
 }
 
 export async function deleteChatApi(chatId) {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const res = await fetch(`${API_URL}/api/chat/${chatId}`, {
     method: "DELETE",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
     credentials: "include",
   });
 

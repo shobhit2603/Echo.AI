@@ -12,6 +12,14 @@ export default function AuthProvider({ children }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // Intercept token from URL if present
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) {
+      localStorage.setItem("token", token);
+      // Clean up the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
     setIsMounted(true);
   }, []);
 
