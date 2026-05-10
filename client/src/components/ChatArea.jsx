@@ -127,7 +127,7 @@ export default function ChatArea() {
                   "Explain quantum computing in simple terms.",
                 )
               }
-              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-primary/30 transition-colors shadow-sm"
+              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-primary/30 transition-colors shadow-sm cursor-pointer"
             >
               <Brain weight="duotone" className="text-primary w-8 h-8 mb-4" />
               <h3 className="font-medium text-foreground mb-1">Learn</h3>
@@ -145,7 +145,7 @@ export default function ChatArea() {
                   "Draft an email to my team about the upcoming product launch.",
                 )
               }
-              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-secondary/30 transition-colors shadow-sm"
+              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-secondary/30 transition-colors shadow-sm cursor-pointer"
             >
               <PencilCircle
                 weight="duotone"
@@ -166,11 +166,11 @@ export default function ChatArea() {
                   "What are some hidden gem travel destinations in Japan?",
                 )
               }
-              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-zinc-400 transition-colors shadow-sm"
+              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-lime-500/30 transition-colors shadow-sm cursor-pointer"
             >
               <Compass
                 weight="duotone"
-                className="text-zinc-400 w-8 h-8 mb-4"
+                className="text-lime-500 w-8 h-8 mb-4"
               />
               <h3 className="font-medium text-foreground mb-1">Explore</h3>
               <p className="text-xs text-muted font-light">

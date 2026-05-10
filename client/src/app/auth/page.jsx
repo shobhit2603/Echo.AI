@@ -180,10 +180,10 @@ export default function AuthPage() {
           whileHover={hoverScale}
           className="md:col-span-4 rounded-3xl bg-card border border-card-border p-6 flex flex-col gap-4 group cursor-pointer"
         >
-          <div className="h-12 w-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-zinc-300 dark:group-hover:bg-zinc-700 transition-colors">
+          <div className="h-12 w-12 rounded-full bg-lime-400/20 dark:bg-lime-400/20 flex items-center justify-center group-hover:bg-lime-500/30 dark:group-hover:bg-lime-400/30 transition-colors">
             <Compass
               weight="duotone"
-              className="h-6 w-6 text-zinc-600 dark:text-zinc-400"
+              className="h-6 w-6 text-lime-500 dark:text-lime-400"
             />
           </div>
           <div>
