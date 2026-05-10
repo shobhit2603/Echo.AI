@@ -10,9 +10,16 @@ import config from "./config/config.js";
 
 const app = express();
 
+// Trust reverse proxy (Railway) for secure cookies
+app.set("trust proxy", 1);
+
 app.use(morgan("dev"));
+
+// Strip trailing slash from CLIENT_URL for exact CORS matching
+const clientUrl = config.CLIENT_URL ? config.CLIENT_URL.replace(/\/$/, "") : "";
+
 app.use(cors({
-  origin: config.CLIENT_URL,
+  origin: clientUrl,
   credentials: true
 }));
 app.use(cookieParser());

@@ -39,11 +39,12 @@ export const googleAuthController = async (req, res) => {
       role: user.role,
     });
 
-    // Set secure cookie
+    // Set secure cookie. Force production rules if Vercel is in the CLIENT_URL
+    const isProduction = config.NODE_ENV === "production" || (config.CLIENT_URL && config.CLIENT_URL.includes("vercel.app"));
     const cookieOptions = {
       httpOnly: true,
-      secure: config.NODE_ENV === "production",
-      sameSite: config.NODE_ENV === "production" ? "none" : "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: "/",
     };
@@ -115,10 +116,11 @@ export const getCurrentUser = async (req, res) => {
 // logoutController
 export const logoutController = async (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === "production" || (process.env.CLIENT_URL && process.env.CLIENT_URL.includes("vercel.app"));
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     };
 
     res.clearCookie("token", cookieOptions);
