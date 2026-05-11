@@ -1,5 +1,8 @@
 import { ChatMistralAI } from "@langchain/mistralai";
+import { createAgent, tool } from "langchain";
+import * as z from "zod";
 import config from "../config/config.js";
+import { search } from "./search.js";
 
 // Production ready model configuration with retries and appropriate temperature
 const model = new ChatMistralAI({
@@ -7,6 +10,22 @@ const model = new ChatMistralAI({
   apiKey: config.MISTRAL_API_KEY,
   temperature: 0.7, // Good balance for a conversational chat app
   maxRetries: 3,    // Fault tolerance for API failures
+});
+
+const search_tool = tool(
+  search,
+  {
+    name: "search_tool",
+    description: "Use this tool to find latest information on the internet. Mandatory to use this tool if you don't have the information about user query.",
+    schema: z.object({
+      query: z.string().describe("The search query to find information about")
+    })
+  }
+);
+
+const agent = createAgent({
+  model,
+  tools: [search_tool]
 });
 
 const DEFAULT_SYSTEM_PROMPT = {
@@ -21,7 +40,7 @@ const DEFAULT_SYSTEM_PROMPT = {
  * @param {Array} [params.history=[]] - Array of previous messages [{role: 'user'|'assistant', content: '...'}]
  * @param {string} [params.systemPrompt] - Optional custom system prompt
  */
-export async function getAIResponse({ content, history = [], systemPrompt = null }) {
+export async function* getAIResponse({ content, history = [], systemPrompt = null }) {
   try {
     if (!content && (!history || history.length === 0)) {
       throw new Error("Content or conversation history is required.");
@@ -31,9 +50,9 @@ export async function getAIResponse({ content, history = [], systemPrompt = null
 
     // 1. Add System Prompt
     if (systemPrompt) {
-      formattedMessages.push(["system", systemPrompt]);
+      formattedMessages.push(["system", systemPrompt + `\nCurrent date and time: ${new Date().toLocaleString()}`]);
     } else {
-      formattedMessages.push(["system", DEFAULT_SYSTEM_PROMPT.content]);
+      formattedMessages.push(["system", DEFAULT_SYSTEM_PROMPT.content + `\nCurrent date and time: ${new Date().toLocaleString()}`]);
     }
 
     // 2. Add Conversation History (remember previous chats)
@@ -50,8 +69,18 @@ export async function getAIResponse({ content, history = [], systemPrompt = null
       formattedMessages.push(["user", content]);
     }
 
-    const stream = await model.stream(formattedMessages);
-    return stream;
+    const events = agent.streamEvents({
+      messages: formattedMessages
+    }, { version: "v2" });
+
+    for await (const event of events) {
+      if (event.event === "on_chat_model_stream") {
+        const chunkContent = event.data.chunk.content;
+        if (chunkContent) {
+          yield { content: chunkContent };
+        }
+      }
+    }
   } catch (error) {
     console.error("[AI Service Error] getAIResponse failed:", error.message);
     throw new Error("Failed to get AI response. Please try again later.");
@@ -71,7 +100,7 @@ export async function getTitle({ message }) {
     const titleModel = new ChatMistralAI({
       model: "mistral-medium-latest",
       apiKey: config.MISTRAL_API_KEY,
-      temperature: 0.2, 
+      temperature: 0.2,
       maxRetries: 2,
     });
 
