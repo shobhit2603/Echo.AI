@@ -17,7 +17,7 @@ export const createChat = async (userId, title = "New Chat") => {
  */
 export const getUserChats = async (userId) => {
   return await Chat.find({ user: userId })
-    .sort({ _id: -1 })
+    .sort({ isPinned: -1, _id: -1 })
     .select("-messages"); // Exclude messages for sidebar listing
 };
 
@@ -50,7 +50,7 @@ export const saveMessage = async (chatId, role, content) => {
     role,
     content,
   });
-  
+
   const savedMessage = await newMessage.save();
 
   // Push message ID to the chat's messages array
@@ -68,6 +68,17 @@ export const updateChatTitle = async (chatId, title) => {
   return await Chat.findByIdAndUpdate(
     chatId,
     { title },
+    { new: true }
+  );
+};
+
+/**
+ * Toggles the pinned status of a chat
+ */
+export const togglePinChat = async (chatId, isPinned) => {
+  return await Chat.findByIdAndUpdate(
+    chatId,
+    { isPinned },
     { new: true }
   );
 };

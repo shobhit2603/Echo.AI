@@ -5,6 +5,7 @@ import {
   getSidebarChats,
   getChatHistory,
   deleteChat,
+  togglePinChat,
 } from "../controllers/chat.controller.js";
 
 const chatRouter = Router();
@@ -23,5 +24,8 @@ chatRouter.get("/:chatId", getChatHistory);
 
 // Delete a specific chat
 chatRouter.delete("/:chatId", deleteChat);
+
+// Toggle pin status of a specific chat
+chatRouter.patch("/:chatId/pin", togglePinChat);
 
 export default chatRouter;

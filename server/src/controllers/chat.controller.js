@@ -19,7 +19,7 @@ export const handleMessage = async (req, res) => {
     if (providedChatId) {
       chat = await chatDao.getChatById(providedChatId);
       if (!chat) return res.status(404).json({ success: false, message: "Chat not found" });
-      
+
       // Verify ownership
       if (chat.user.toString() !== userId) {
         return res.status(403).json({ success: false, message: "Forbidden" });
@@ -35,7 +35,7 @@ export const handleMessage = async (req, res) => {
     // Extract history before saving the new message
     let history = [];
     if (!isNewChat && chat.messages) {
-       history = chat.messages.map(msg => ({ role: msg.role, content: msg.content }));
+      history = chat.messages.map(msg => ({ role: msg.role, content: msg.content }));
     }
 
     // Save user message to database
@@ -108,7 +108,7 @@ export const getChatHistory = async (req, res) => {
   try {
     const { chatId } = req.params;
     const chat = await chatDao.getChatById(chatId);
-    
+
     if (!chat) {
       return res.status(404).json({ success: false, message: "Chat not found" });
     }
@@ -131,7 +131,7 @@ export const getChatHistory = async (req, res) => {
 export const deleteChat = async (req, res) => {
   try {
     const { chatId } = req.params;
-    
+
     // Verify ownership before deleting
     const chat = await chatDao.getChatById(chatId);
     if (!chat) {
@@ -146,6 +146,32 @@ export const deleteChat = async (req, res) => {
     res.status(200).json({ success: true, message: "Chat deleted successfully" });
   } catch (error) {
     console.error("Error in deleteChat:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+/**
+ * Toggle pin status of a specific chat
+ */
+export const togglePinChat = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const { isPinned } = req.body;
+
+    // Verify ownership
+    const chat = await chatDao.getChatById(chatId);
+    if (!chat) {
+      return res.status(404).json({ success: false, message: "Chat not found" });
+    }
+
+    if (chat.user.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: "Forbidden" });
+    }
+
+    const updatedChat = await chatDao.togglePinChat(chatId, isPinned);
+    res.status(200).json({ success: true, chat: updatedChat });
+  } catch (error) {
+    console.error("Error in togglePinChat:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

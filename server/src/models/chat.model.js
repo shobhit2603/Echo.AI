@@ -16,6 +16,10 @@ const chatSchema = new mongoose.Schema({
       ref: "Message",
     },
   ],
+  isPinned: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Chat = mongoose.model("Chat", chatSchema);
