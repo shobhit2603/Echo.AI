@@ -185,227 +185,235 @@ export default function ChatArea() {
 
   // Active Chat State
   return (
-    <div
-      ref={scrollContainerRef}
-      className="flex-1 overflow-y-auto p-4 pt-16 md:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-    >
-      <div className="max-w-4xl mx-auto space-y-6 pb-4">
-        {currentChat.messages.map((msg, index) => {
-          const isUser = msg.role === "user";
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex gap-4 w-full ${isUser ? "justify-end" : "justify-start"}`}
-            >
-              {!isUser && (
-                <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shrink-0 mt-1 shadow-sm">
-                  <ShootingStarIcon
-                    weight="fill"
-                    className="text-white w-4 h-4"
-                  />
-                </div>
-              )}
+    <div className="flex-1 flex flex-col overflow-hidden relative">
+      {/* Chat Title Header */}
+      <div className="shrink-0 py-4 pl-18 pr-4 md:py-5 md:pl-20 md:pr-8 border-b border-card-border/50 bg-background/80 backdrop-blur-md z-10 flex items-center justify-start shadow-sm transition-all">
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground truncate max-w-[85%] md:max-w-2xl">
+          {currentChat.title || "Active Chat"}
+        </h2>
+      </div>
 
-              <div
-                className={`max-w-[85%] md:max-w-[75%] text-[16px] leading-relaxed ${
-                  isUser
-                    ? "p-4 bg-primary text-white rounded-l-2xl rounded-tr-2xl rounded-br-sm shadow-sm"
-                    : "text-foreground pt-1"
-                }`}
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto p-4 md:p-8 pt-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      >
+        <div className="max-w-4xl mx-auto space-y-6 pb-4">
+          {currentChat.messages.map((msg, index) => {
+            const isUser = msg.role === "user";
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex gap-4 w-full ${isUser ? "justify-end" : "justify-start"}`}
               >
-                {isUser ? (
-                  <div className="whitespace-pre-wrap">{msg.content}</div>
-                ) : (
-                  <div className="markdown-body">
-                    {/* Show typing dots while waiting for first chunk */}
-                    {isStreaming &&
-                    index === currentChat.messages.length - 1 &&
-                    !msg.content ? (
-                      <div className="flex items-center gap-1.5 py-2">
-                        <span
-                          className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"
-                          style={{ animationDelay: "0ms" }}
-                        />
-                        <span
-                          className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"
-                          style={{ animationDelay: "150ms" }}
-                        />
-                        <span
-                          className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"
-                          style={{ animationDelay: "300ms" }}
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          components={{
-                            code({
-                              node,
-                              inline,
-                              className,
-                              children,
-                              ...props
-                            }) {
-                              const match = /language-(\w+)/.exec(
-                                className || "",
-                              );
-                              return !inline && match ? (
-                                <div className="rounded-xl overflow-hidden my-4 border border-zinc-700 shadow-md">
-                                  <div className="bg-zinc-800/80 px-4 py-2 flex items-center justify-between text-xs text-zinc-400 font-mono border-b border-zinc-700">
-                                    <span>{match[1]}</span>
+                {!isUser && (
+                  <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shrink-0 mt-1 shadow-sm">
+                    <ShootingStarIcon
+                      weight="fill"
+                      className="text-white w-4 h-4"
+                    />
+                  </div>
+                )}
+
+                <div
+                  className={`max-w-[85%] md:max-w-[75%] text-[16px] leading-relaxed ${isUser
+                      ? "p-4 bg-primary text-white rounded-l-2xl rounded-tr-2xl rounded-br-sm shadow-sm"
+                      : "text-foreground pt-1"
+                    }`}
+                >
+                  {isUser ? (
+                    <div className="whitespace-pre-wrap">{msg.content}</div>
+                  ) : (
+                    <div className="markdown-body">
+                      {/* Show typing dots while waiting for first chunk */}
+                      {isStreaming &&
+                        index === currentChat.messages.length - 1 &&
+                        !msg.content ? (
+                        <div className="flex items-center gap-1.5 py-2">
+                          <span
+                            className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"
+                            style={{ animationDelay: "0ms" }}
+                          />
+                          <span
+                            className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"
+                            style={{ animationDelay: "150ms" }}
+                          />
+                          <span
+                            className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"
+                            style={{ animationDelay: "300ms" }}
+                          />
+                        </div>
+                      ) : (
+                        <>
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                              code({
+                                node,
+                                inline,
+                                className,
+                                children,
+                                ...props
+                              }) {
+                                const match = /language-(\w+)/.exec(
+                                  className || "",
+                                );
+                                return !inline && match ? (
+                                  <div className="rounded-xl overflow-hidden my-4 border border-zinc-700 shadow-md">
+                                    <div className="bg-zinc-800/80 px-4 py-2 flex items-center justify-between text-xs text-zinc-400 font-mono border-b border-zinc-700">
+                                      <span>{match[1]}</span>
+                                    </div>
+                                    <SyntaxHighlighter
+                                      {...props}
+                                      style={vscDarkPlus}
+                                      language={match[1]}
+                                      PreTag="div"
+                                      className="m-0! bg-[#1e1e1e]! p-4! text-sm! scrollbar-thin scrollbar-thumb-zinc-600"
+                                    >
+                                      {String(children).replace(/\n$/, "")}
+                                    </SyntaxHighlighter>
                                   </div>
-                                  <SyntaxHighlighter
+                                ) : (
+                                  <code
                                     {...props}
-                                    style={vscDarkPlus}
-                                    language={match[1]}
-                                    PreTag="div"
-                                    className="m-0! bg-[#1e1e1e]! p-4! text-sm! scrollbar-thin scrollbar-thumb-zinc-600"
+                                    className="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-sm font-mono text-primary border border-zinc-200 dark:border-zinc-700"
                                   >
-                                    {String(children).replace(/\n$/, "")}
-                                  </SyntaxHighlighter>
-                                </div>
-                              ) : (
-                                <code
-                                  {...props}
-                                  className="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-sm font-mono text-primary border border-zinc-200 dark:border-zinc-700"
-                                >
-                                  {children}
-                                </code>
-                              );
-                            },
-                            p({ children }) {
-                              return (
-                                <p className="mb-4 last:mb-0 leading-loose text-foreground/90">
-                                  {children}
-                                </p>
-                              );
-                            },
-                            ul({ children }) {
-                              return (
-                                <ul className="list-disc pl-5 mb-4 space-y-2 text-foreground/90">
-                                  {children}
-                                </ul>
-                              );
-                            },
-                            ol({ children }) {
-                              return (
-                                <ol className="list-decimal pl-5 mb-4 space-y-2 text-foreground/90">
-                                  {children}
-                                </ol>
-                              );
-                            },
-                            h1({ children }) {
-                              return (
-                                <h1 className="text-2xl font-bold mb-4 mt-6 text-foreground tracking-tight">
-                                  {children}
-                                </h1>
-                              );
-                            },
-                            h2({ children }) {
-                              return (
-                                <h2 className="text-xl font-bold mb-3 mt-5 text-foreground tracking-tight">
-                                  {children}
-                                </h2>
-                              );
-                            },
-                            h3({ children }) {
-                              return (
-                                <h3 className="text-lg font-semibold mb-3 mt-4 text-foreground tracking-tight">
-                                  {children}
-                                </h3>
-                              );
-                            },
-                            strong({ children }) {
-                              return (
-                                <strong className="font-semibold text-foreground">
-                                  {children}
-                                </strong>
-                              );
-                            },
-                            a({ children, href }) {
-                              return (
-                                <a
-                                  href={href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-primary hover:text-primary-hover underline underline-offset-4 decoration-primary/30 transition-colors"
-                                >
-                                  {children}
-                                </a>
-                              );
-                            },
-                            table({ children }) {
-                              return (
-                                <div className="overflow-x-auto my-4">
-                                  <table className="min-w-full text-sm text-left">
                                     {children}
-                                  </table>
-                                </div>
-                              );
-                            },
-                            thead({ children }) {
-                              return (
-                                <thead className="text-xs uppercase bg-zinc-50 dark:bg-zinc-800/50 text-muted">
-                                  {children}
-                                </thead>
-                              );
-                            },
-                            th({ children }) {
-                              return (
-                                <th className="px-4 py-3 font-medium border-b border-card-border">
-                                  {children}
-                                </th>
-                              );
-                            },
-                            td({ children }) {
-                              return (
-                                <td className="px-4 py-3 border-b border-card-border/50">
-                                  {children}
-                                </td>
-                              );
-                            },
-                            blockquote({ children }) {
-                              return (
-                                <blockquote className="border-l-4 border-primary/50 pl-4 py-1 my-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-r-lg text-muted italic">
-                                  {children}
-                                </blockquote>
-                              );
-                            },
-                          }}
-                        >
-                          {msg.content}
-                        </ReactMarkdown>
-                        {/* Blinking cursor while AI is still streaming */}
-                        {isStreaming &&
-                          index === currentChat.messages.length - 1 && (
-                            <span className="inline-block w-[3px] h-[1.1em] bg-primary/70 rounded-full ml-0.5 align-middle animate-pulse" />
-                          )}
-                      </>
+                                  </code>
+                                );
+                              },
+                              p({ children }) {
+                                return (
+                                  <p className="mb-4 last:mb-0 leading-loose text-foreground/90">
+                                    {children}
+                                  </p>
+                                );
+                              },
+                              ul({ children }) {
+                                return (
+                                  <ul className="list-disc pl-5 mb-4 space-y-2 text-foreground/90">
+                                    {children}
+                                  </ul>
+                                );
+                              },
+                              ol({ children }) {
+                                return (
+                                  <ol className="list-decimal pl-5 mb-4 space-y-2 text-foreground/90">
+                                    {children}
+                                  </ol>
+                                );
+                              },
+                              h1({ children }) {
+                                return (
+                                  <h1 className="text-2xl font-bold mb-4 mt-6 text-foreground tracking-tight">
+                                    {children}
+                                  </h1>
+                                );
+                              },
+                              h2({ children }) {
+                                return (
+                                  <h2 className="text-xl font-bold mb-3 mt-5 text-foreground tracking-tight">
+                                    {children}
+                                  </h2>
+                                );
+                              },
+                              h3({ children }) {
+                                return (
+                                  <h3 className="text-lg font-semibold mb-3 mt-4 text-foreground tracking-tight">
+                                    {children}
+                                  </h3>
+                                );
+                              },
+                              strong({ children }) {
+                                return (
+                                  <strong className="font-semibold text-foreground">
+                                    {children}
+                                  </strong>
+                                );
+                              },
+                              a({ children, href }) {
+                                return (
+                                  <a
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-primary hover:text-primary-hover underline underline-offset-4 decoration-primary/30 transition-colors"
+                                  >
+                                    {children}
+                                  </a>
+                                );
+                              },
+                              table({ children }) {
+                                return (
+                                  <div className="overflow-x-auto my-4">
+                                    <table className="min-w-full text-sm text-left">
+                                      {children}
+                                    </table>
+                                  </div>
+                                );
+                              },
+                              thead({ children }) {
+                                return (
+                                  <thead className="text-xs uppercase bg-zinc-50 dark:bg-zinc-800/50 text-muted">
+                                    {children}
+                                  </thead>
+                                );
+                              },
+                              th({ children }) {
+                                return (
+                                  <th className="px-4 py-3 font-medium border-b border-card-border">
+                                    {children}
+                                  </th>
+                                );
+                              },
+                              td({ children }) {
+                                return (
+                                  <td className="px-4 py-3 border-b border-card-border/50">
+                                    {children}
+                                  </td>
+                                );
+                              },
+                              blockquote({ children }) {
+                                return (
+                                  <blockquote className="border-l-4 border-primary/50 pl-4 py-1 my-4 bg-zinc-50 dark:bg-zinc-800/30 rounded-r-lg text-muted italic">
+                                    {children}
+                                  </blockquote>
+                                );
+                              },
+                            }}
+                          >
+                            {msg.content}
+                          </ReactMarkdown>
+                          {/* Blinking cursor while AI is still streaming */}
+                          {isStreaming &&
+                            index === currentChat.messages.length - 1 && (
+                              <span className="inline-block w-0.75 h-[1.1em] bg-primary/70 rounded-full ml-0.5 align-middle animate-pulse" />
+                            )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {isUser && (
+                  <div className="w-8 h-8 rounded-xl bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shrink-0 mt-1 overflow-hidden shadow-sm">
+                    {user?.profilePicture ? (
+                      <img
+                        src={user.profilePicture}
+                        alt="User"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <UserIcon weight="fill" className="text-muted w-4 h-4" />
                     )}
                   </div>
                 )}
-              </div>
-
-              {isUser && (
-                <div className="w-8 h-8 rounded-xl bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shrink-0 mt-1 overflow-hidden shadow-sm">
-                  {user?.profilePicture ? (
-                    <img
-                      src={user.profilePicture}
-                      alt="User"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <UserIcon weight="fill" className="text-muted w-4 h-4" />
-                  )}
-                </div>
-              )}
-            </motion.div>
-          );
-        })}
-        <div ref={bottomRef} className="h-4" />
+              </motion.div>
+            );
+          })}
+          <div ref={bottomRef} className="h-4" />
+        </div>
       </div>
     </div>
   );
