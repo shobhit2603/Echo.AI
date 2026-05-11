@@ -46,3 +46,22 @@ export async function deleteChatApi(chatId) {
 
   return await res.json();
 }
+
+export async function togglePinChatApi(chatId, isPinned) {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const res = await fetch(`${API_URL}/api/chat/${chatId}/pin`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ isPinned }),
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to toggle pin status");
+  }
+
+  return await res.json();
+}

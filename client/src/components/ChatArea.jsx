@@ -87,7 +87,7 @@ export default function ChatArea() {
   // Empty State (New Chat)
   if (!currentChat || currentChat.messages.length === 0) {
     return (
-      <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center p-4 md:p-8">
+      <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center p-4 md:p-8 pt-[calc(max(env(safe-area-inset-top),20px))]">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -117,7 +117,7 @@ export default function ChatArea() {
             new.
           </motion.p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+          <div className="hidden md:grid md:grid-cols-3 gap-4 w-full">
             <motion.button
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
@@ -187,7 +187,7 @@ export default function ChatArea() {
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative">
       {/* Chat Title Header */}
-      <div className="shrink-0 py-4 pl-18 pr-4 md:py-5 md:pl-20 md:pr-8 border-b border-card-border/50 bg-background/80 backdrop-blur-md z-10 flex items-center justify-start shadow-sm transition-all">
+      <div className="shrink-0 py-4 pt-[calc(max(env(safe-area-inset-top),16px))] pl-18 pr-4 md:py-5 md:pl-20 md:pr-8 border-b border-card-border/50 bg-background/80 backdrop-blur-md z-10 flex items-center justify-start shadow-sm transition-all">
         <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground truncate max-w-[85%] md:max-w-2xl">
           {currentChat.title || "Active Chat"}
         </h2>
@@ -218,8 +218,8 @@ export default function ChatArea() {
 
                 <div
                   className={`max-w-[85%] md:max-w-[75%] text-[16px] leading-relaxed ${isUser
-                      ? "p-4 bg-primary text-white rounded-l-2xl rounded-tr-2xl rounded-br-sm shadow-sm"
-                      : "text-foreground pt-1"
+                    ? "p-4 bg-primary text-white rounded-l-2xl rounded-tr-2xl rounded-br-sm shadow-sm"
+                    : "text-foreground pt-1"
                     }`}
                 >
                   {isUser ? (

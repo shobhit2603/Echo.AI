@@ -14,7 +14,7 @@ export default function Home() {
   }, [loadSidebar]);
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background text-foreground transition-colors duration-300">
+    <div className="flex h-dvh w-full relative overflow-hidden bg-background text-foreground transition-colors duration-300">
       {/* Left Section: Sidebar */}
       <Sidebar />
 

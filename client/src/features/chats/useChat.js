@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback } from "react";
-import { fetchSidebarChatsApi, fetchChatHistoryApi, deleteChatApi } from "./chat.api";
+import { fetchSidebarChatsApi, fetchChatHistoryApi, deleteChatApi, togglePinChatApi } from "./chat.api";
 import {
   setSidebarChats,
   setCurrentChat,
@@ -14,6 +14,7 @@ import {
   setIsStreaming,
   addSidebarChatOptimistic,
   removeChatOptimistic,
+  togglePinChatOptimistic,
   updateCurrentChatMetadata,
 } from "./chatSlice";
 
@@ -57,6 +58,17 @@ export default function useChat() {
     }
   }, [dispatch, loadSidebar]);
 
+  const togglePinChat = useCallback(async (chatId, isPinned) => {
+    try {
+      // Optimistically update the UI
+      dispatch(togglePinChatOptimistic({ chatId, isPinned }));
+      await togglePinChatApi(chatId, isPinned);
+    } catch (error) {
+      console.error("Error toggling pin status:", error);
+      loadSidebar(); // Sync on failure
+    }
+  }, [dispatch, loadSidebar]);
+
   const sendMessage = useCallback(async (content, chatId = null) => {
     if (!content.trim()) return;
 
@@ -69,19 +81,19 @@ export default function useChat() {
         messages: []
       }));
     }
-    
+
     // Optimistically add the user message
     dispatch(addMessageToCurrentChat({ role: "user", content }));
     // Optimistically add an empty AI message to stream into
     dispatch(addMessageToCurrentChat({ role: "ai", content: "" }));
-    
+
     dispatch(setIsStreaming(true));
 
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const res = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
@@ -101,7 +113,7 @@ export default function useChat() {
       while (!done) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
-        
+
         if (value) {
           buffer += decoder.decode(value, { stream: true });
           const lines = buffer.split("\n");
@@ -157,6 +169,7 @@ export default function useChat() {
     loadSidebar,
     loadChat,
     removeChat,
+    togglePinChat,
     sendMessage,
     clearCurrentChat,
   };

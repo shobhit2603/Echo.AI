@@ -52,6 +52,23 @@ export const chatSlice = createSlice({
         state.currentChat = null;
       }
     },
+    togglePinChatOptimistic: (state, action) => {
+      const { chatId, isPinned } = action.payload;
+      const chat = state.sidebarChats.find(c => c._id === chatId);
+      if (chat) {
+        chat.isPinned = isPinned;
+      }
+
+      // Sort: Pinned first, then by ID descending (or timestamp if available)
+      state.sidebarChats.sort((a, b) => {
+        if (a.isPinned === b.isPinned) {
+          // If both pinned or both not pinned, new ones come first
+          // Assuming `_id` comparison works for descending (ObjectId)
+          return a._id < b._id ? 1 : -1;
+        }
+        return a.isPinned ? -1 : 1;
+      });
+    },
     updateCurrentChatMetadata: (state, action) => {
       if (state.currentChat) {
         state.currentChat._id = action.payload._id;
@@ -72,6 +89,7 @@ export const {
   setIsStreaming,
   addSidebarChatOptimistic,
   removeChatOptimistic,
+  togglePinChatOptimistic,
   updateCurrentChatMetadata,
 } = chatSlice.actions;
 

@@ -11,6 +11,7 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
     "@reduxjs/toolkit": "^2.11.2",
+    "@splinetool/react-spline": "^4.1.0",
     "motion": "^12.38.0",
     "next": "16.2.6",
     "react": "19.2.4",
