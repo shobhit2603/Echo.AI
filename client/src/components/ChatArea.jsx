@@ -3,9 +3,6 @@
 import { useEffect, useRef, useCallback } from "react";
 import { motion } from "motion/react";
 import {
-  Brain,
-  Compass,
-  PencilCircle,
   PentagramIcon,
   ShootingStarIcon,
   User as UserIcon,
@@ -16,6 +13,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import Spline from "@splinetool/react-spline";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -87,97 +85,56 @@ export default function ChatArea() {
   // Empty State (New Chat)
   if (!currentChat || currentChat.messages.length === 0) {
     return (
-      <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center p-4 md:p-8 pt-[calc(max(env(safe-area-inset-top),20px))]">
+      <div className="flex-1 overflow-y-auto flex items-center justify-center p-4 md:p-8 pt-[calc(max(env(safe-area-inset-top),20px))]">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full max-w-3xl flex flex-col items-center text-center mt-12 mb-20"
+          className="w-full max-w-6xl flex flex-col md:flex-row-reverse items-center justify-between gap-8 md:gap-12 lg:gap-20 mt-4"
         >
+          {/* Text Content */}
           <motion.div
             variants={itemVariants}
-            className="p-4 bg-primary/10 rounded-3xl mb-6"
+            className="flex-1 flex flex-col items-center md:items-start text-center md:text-left z-10 w-full"
           >
-            <ShootingStarIcon
-              weight="fill"
-              className="text-primary h-12 w-12"
-            />
+            <motion.div
+              variants={itemVariants}
+              className="p-3 md:p-4 bg-primary/10 rounded-2xl md:rounded-3xl mb-6 ring-1 ring-primary/20 shadow-sm"
+            >
+              <ShootingStarIcon
+                weight="fill"
+                className="text-primary h-8 w-8 md:h-10 md:w-10"
+              />
+            </motion.div>
+            <motion.h1
+              variants={itemVariants}
+              className="mb-4 flex flex-col items-center md:items-start text-center md:text-left"
+            >
+              <span className="text-3xl sm:text-4xl md:text-5xl tracking-tight font-light text-foreground/70 mb-2">
+                Welcome back,
+              </span>
+              <span className="text-6xl sm:text-7xl md:text-[5rem] lg:text-[5.5rem] tracking-tight font-medium bg-linear-to-r from-primary via-fuchsia-500 to-secondary bg-clip-text text-transparent drop-shadow-md pb-2 leading-[1.1]">
+                {user?.name?.split(" ")[0] || "User"}
+              </span>
+            </motion.h1>
+            <motion.p
+              variants={itemVariants}
+              className="text-lg md:text-xl text-muted font-light max-w-lg"
+            >
+              How can I assist you today? Let's build, learn, or explore
+              something new together.
+            </motion.p>
           </motion.div>
-          <motion.h1
+
+          {/* 3D Model Container */}
+          <motion.div
             variants={itemVariants}
-            className="text-4xl md:text-5xl tracking-tight font-medium text-foreground mb-4"
+            className="flex-1 w-full h-[350px] sm:h-[400px] md:h-[500px] flex items-center justify-center relative"
           >
-            Welcome back, {user?.name?.split(" ")[0] || "User"}
-          </motion.h1>
-          <motion.p
-            variants={itemVariants}
-            className="text-lg text-muted font-light max-w-lg mb-12"
-          >
-            How can I assist you today? Let's build, learn, or explore something
-            new.
-          </motion.p>
-
-          <div className="hidden md:grid md:grid-cols-3 gap-4 w-full">
-            <motion.button
-              variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() =>
-                handleSuggestionClick(
-                  "Explain quantum computing in simple terms.",
-                )
-              }
-              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-primary/30 transition-colors shadow-sm cursor-pointer"
-            >
-              <Brain weight="duotone" className="text-primary w-8 h-8 mb-4" />
-              <h3 className="font-medium text-foreground mb-1">Learn</h3>
-              <p className="text-xs text-muted font-light">
-                Explain complex topics simply.
-              </p>
-            </motion.button>
-
-            <motion.button
-              variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() =>
-                handleSuggestionClick(
-                  "Draft an email to my team about the upcoming product launch.",
-                )
-              }
-              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-secondary/30 transition-colors shadow-sm cursor-pointer"
-            >
-              <PencilCircle
-                weight="duotone"
-                className="text-secondary w-8 h-8 mb-4"
-              />
-              <h3 className="font-medium text-foreground mb-1">Create</h3>
-              <p className="text-xs text-muted font-light">
-                Draft emails, essays, or code.
-              </p>
-            </motion.button>
-
-            <motion.button
-              variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() =>
-                handleSuggestionClick(
-                  "What are some hidden gem travel destinations in Japan?",
-                )
-              }
-              className="flex flex-col items-start text-left p-6 rounded-3xl bg-card border border-card-border hover:border-lime-500/30 transition-colors shadow-sm cursor-pointer"
-            >
-              <Compass
-                weight="duotone"
-                className="text-lime-500 w-8 h-8 mb-4"
-              />
-              <h3 className="font-medium text-foreground mb-1">Explore</h3>
-              <p className="text-xs text-muted font-light">
-                Discover new ideas and places.
-              </p>
-            </motion.button>
-          </div>
+            <div className="w-full h-full relative z-10">
+              <Spline scene="https://prod.spline.design/DwotANmSGhmIbCEI/scene.splinecode" />
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     );
@@ -217,10 +174,11 @@ export default function ChatArea() {
                 )}
 
                 <div
-                  className={`max-w-[85%] md:max-w-[75%] text-[16px] leading-relaxed ${isUser
-                    ? "p-4 bg-primary text-white rounded-l-2xl rounded-tr-2xl rounded-br-sm shadow-sm"
-                    : "text-foreground pt-1"
-                    }`}
+                  className={`max-w-[85%] md:max-w-[75%] text-[16px] leading-relaxed ${
+                    isUser
+                      ? "p-4 bg-primary text-white rounded-l-2xl rounded-tr-2xl rounded-br-sm shadow-sm"
+                      : "text-foreground pt-1"
+                  }`}
                 >
                   {isUser ? (
                     <div className="whitespace-pre-wrap">{msg.content}</div>
@@ -228,8 +186,8 @@ export default function ChatArea() {
                     <div className="markdown-body">
                       {/* Show typing dots while waiting for first chunk */}
                       {isStreaming &&
-                        index === currentChat.messages.length - 1 &&
-                        !msg.content ? (
+                      index === currentChat.messages.length - 1 &&
+                      !msg.content ? (
                         <div className="flex items-center gap-1.5 py-2">
                           <span
                             className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"
