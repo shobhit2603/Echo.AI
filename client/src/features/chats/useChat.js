@@ -69,8 +69,16 @@ export default function useChat() {
     }
   }, [dispatch, loadSidebar]);
 
-  const sendMessage = useCallback(async (content, chatId = null) => {
-    if (!content.trim()) return;
+  const sendMessage = useCallback(async (rawContent, chatId = null, file = null) => {
+    let content = rawContent;
+    if (!content?.trim() && !file) return;
+
+    if (file) {
+      const text = content?.trim() ? content.trim() : "I have uploaded a document. Please review it.";
+      content = `[ATTACHED_PDF: ${file.name}]\n\n${text}`;
+    } else {
+      content = content.trim();
+    }
 
     // Optimistically initialize the currentChat if starting a new one
     // This allows the UI to instantly transition to the ChatArea from the Empty State
@@ -91,13 +99,29 @@ export default function useChat() {
 
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      let body;
+      let headers = {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      };
+
+      if (file) {
+        const formData = new FormData();
+        formData.append("content", content);
+        if (chatId && !chatId.startsWith("temp_")) formData.append("chatId", chatId);
+        formData.append("pdf", file);
+        body = formData;
+        // Do not set Content-Type for FormData, let browser handle the boundary
+      } else {
+        headers["Content-Type"] = "application/json";
+        const payload = { content };
+        if (chatId && !chatId.startsWith("temp_")) payload.chatId = chatId;
+        body = JSON.stringify(payload);
+      }
+
       const res = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify({ content, chatId }),
+        headers,
+        body,
         credentials: "include",
       });
 

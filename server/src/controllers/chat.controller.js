@@ -1,16 +1,27 @@
 import * as chatDao from "../dao/chat.dao.js";
 import * as aiService from "../services/ai.service.js";
+import { ingestPDF } from "../tools/rag.tool.js";
+import fs from "fs";
 
 /**
  * Handle incoming user messages and stream AI responses using SSE
  */
 export const handleMessage = async (req, res) => {
+  let fileToCleanUp = null; // Track file for guaranteed cleanup
+
   try {
     const userId = req.user.id;
     const { content, chatId: providedChatId } = req.body;
 
+    // Track the uploaded file path
+    if (req.file) {
+      fileToCleanUp = req.file.path;
+    }
+
     if (!content) {
-      return res.status(400).json({ success: false, message: "Content is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Content is required" });
     }
 
     let chat;
@@ -18,71 +29,104 @@ export const handleMessage = async (req, res) => {
 
     if (providedChatId) {
       chat = await chatDao.getChatById(providedChatId);
-      if (!chat) return res.status(404).json({ success: false, message: "Chat not found" });
+      if (!chat)
+        return res
+          .status(404)
+          .json({ success: false, message: "Chat not found" });
 
-      // Verify ownership
       if (chat.user.toString() !== userId) {
         return res.status(403).json({ success: false, message: "Forbidden" });
       }
     } else {
-      // Create new chat and generate title
       const titleResponse = await aiService.getTitle({ message: content });
       const title = titleResponse.chatTitle || "New Chat";
       chat = await chatDao.createChat(userId, title);
       isNewChat = true;
     }
 
-    // Extract history before saving the new message
+    // Process PDF *after* we have a confirmed Chat ID
+    if (fileToCleanUp) {
+      try {
+        // Pass the chatId so Pinecone associates these vectors with ONLY this chat
+        await ingestPDF(fileToCleanUp, chat._id.toString());
+      } catch (error) {
+        console.error("[PDF Ingestion Error]:", error);
+        return res
+          .status(500)
+          .json({
+            success: false,
+            message: "Failed to process the PDF document.",
+            error: error.message || error.toString()
+          });
+      }
+    }
+
     let history = [];
     if (!isNewChat && chat.messages) {
-      history = chat.messages.map(msg => ({ role: msg.role, content: msg.content }));
+      history = chat.messages.map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
     }
 
-    // Save user message to database
     await chatDao.saveMessage(chat._id, "user", content);
 
-    // Setup SSE Headers for streaming
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache, no-transform');
-    res.setHeader('Connection', 'keep-alive');
-    res.setHeader('X-Accel-Buffering', 'no'); // Crucial: prevents Next.js proxy and Nginx from buffering the stream chunks
-    // Flush headers to establish stream immediately
+    // Setup SSE Headers
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
+    res.setHeader("Connection", "keep-alive");
+    res.setHeader("X-Accel-Buffering", "no");
     res.flushHeaders();
 
-    // Send the chatId to the frontend immediately so they can update URL if it's a new chat
     if (isNewChat) {
-      res.write(`data: ${JSON.stringify({ event: 'chat_created', chatId: chat._id, title: chat.title })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({ event: "chat_created", chatId: chat._id, title: chat.title })}\n\n`,
+      );
     }
 
-    // Call AI Service
-    const stream = await aiService.getAIResponse({ content, history });
+    // Call AI Service (Pass the chatId down so the RAG tool knows where to look)
+    const stream = await aiService.getAIResponse({
+      content,
+      history,
+      chatId: chat._id.toString(),
+    });
 
     let fullAIResponse = "";
 
-    // Stream the response back to client
     for await (const chunk of stream) {
       const contentChunk = chunk.content;
       if (contentChunk) {
         fullAIResponse += contentChunk;
-        res.write(`data: ${JSON.stringify({ event: 'message_chunk', chunk: contentChunk })}\n\n`);
+        res.write(
+          `data: ${JSON.stringify({ event: "message_chunk", chunk: contentChunk })}\n\n`,
+        );
       }
     }
 
-    // Save the final AI message to the database
     await chatDao.saveMessage(chat._id, "ai", fullAIResponse);
 
-    // End the stream
-    res.write(`data: ${JSON.stringify({ event: 'message_complete' })}\n\n`);
+    res.write(`data: ${JSON.stringify({ event: "message_complete" })}\n\n`);
     res.end();
-
   } catch (error) {
     console.error("Error in handleMessage:", error);
-    // If headers are already sent, we just end the stream with an error event
     if (!res.headersSent) {
-      res.status(500).json({ success: false, message: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ success: false, message: "Internal Server Error" });
     } else {
-      res.write(`data: ${JSON.stringify({ event: 'error', message: "An error occurred while generating response" })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({ event: "error", message: "An error occurred while generating response" })}\n\n`,
+      );
       res.end();
+    }
+  } finally {
+    // GUARANTEED CLEANUP: This runs no matter what happens above
+    if (fileToCleanUp && fs.existsSync(fileToCleanUp)) {
+      try {
+        fs.unlinkSync(fileToCleanUp);
+      } catch (cleanupError) {
+        console.error("Failed to delete temp file:", cleanupError);
+      }
     }
   }
 };
@@ -110,7 +154,9 @@ export const getChatHistory = async (req, res) => {
     const chat = await chatDao.getChatById(chatId);
 
     if (!chat) {
-      return res.status(404).json({ success: false, message: "Chat not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Chat not found" });
     }
 
     // Ensure user owns this chat
@@ -135,7 +181,9 @@ export const deleteChat = async (req, res) => {
     // Verify ownership before deleting
     const chat = await chatDao.getChatById(chatId);
     if (!chat) {
-      return res.status(404).json({ success: false, message: "Chat not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Chat not found" });
     }
 
     if (chat.user.toString() !== req.user.id) {
@@ -143,7 +191,9 @@ export const deleteChat = async (req, res) => {
     }
 
     await chatDao.deleteChat(chatId);
-    res.status(200).json({ success: true, message: "Chat deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Chat deleted successfully" });
   } catch (error) {
     console.error("Error in deleteChat:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -161,7 +211,9 @@ export const togglePinChat = async (req, res) => {
     // Verify ownership
     const chat = await chatDao.getChatById(chatId);
     if (!chat) {
-      return res.status(404).json({ success: false, message: "Chat not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Chat not found" });
     }
 
     if (chat.user.toString() !== req.user.id) {

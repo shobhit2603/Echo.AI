@@ -10,7 +10,9 @@ if (
   !process.env.GOOGLE_CLIENT_ID ||
   !process.env.GOOGLE_CLIENT_SECRET ||
   !process.env.GOOGLE_CALLBACK_URL ||
-  !process.env.MISTRAL_API_KEY
+  !process.env.MISTRAL_API_KEY ||
+  !process.env.TAVILY_API_KEY ||
+  !process.env.PINECONE_API_KEY
 ) {
   console.error(
     "Missing required environment variables. Please check your .env file.",
@@ -28,6 +30,7 @@ const config = {
   GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
   TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+  PINECONE_API_KEY: process.env.PINECONE_API_KEY,
   NODE_ENV: process.env.NODE_ENV || "development",
 };
 

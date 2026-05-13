@@ -7,14 +7,16 @@ import {
   deleteChat,
   togglePinChat,
 } from "../controllers/chat.controller.js";
+import multer from "multer";
 
+const upload = multer({ dest: "uploads/" });
 const chatRouter = Router();
 
 // Protect all chat routes with authentication
 chatRouter.use(authMiddleware);
 
 // Send a new message (creates a chat if chatId is not provided)
-chatRouter.post("/", handleMessage);
+chatRouter.post("/", upload.single("pdf"), handleMessage);
 
 // Get all chats for the logged in user (for sidebar)
 chatRouter.get("/", getSidebarChats);
