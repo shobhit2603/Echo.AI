@@ -181,7 +181,7 @@ export default function ChatArea() {
                               {msg.content.match(/\[ATTACHED_PDF:\s*(.*?)\]/)?.[1]}
                             </span>
                           </div>
-                          <div>{msg.content.replace(/\[ATTACHED_PDF:\s*(.*?)\]\n\n/, '')}</div>
+                          <div>{msg.content.replace(/\[ATTACHED_PDF:\s*.*?\][\s\r\n]*/, '').trim()}</div>
                         </>
                       ) : (
                         msg.content
