@@ -14,6 +14,7 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Spline from "@splinetool/react-spline";
+import Image from "next/image";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -85,47 +86,50 @@ export default function ChatArea() {
   // Empty State (New Chat)
   if (!currentChat || currentChat.messages.length === 0) {
     return (
-      <div className="flex-1 overflow-y-auto flex items-center justify-center p-4 md:p-8 pt-[calc(max(env(safe-area-inset-top),20px))]">
+      <div className="flex-1 relative flex flex-col items-center justify-start overflow-hidden pt-[5vh] sm:pt-[8vh] md:pt-[10vh]">
+        {/* Text Content - Moved to Top Center, Reduced Size, and click-through */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full max-w-6xl flex flex-col md:flex-row-reverse items-center justify-between gap-8 md:gap-12 lg:gap-20 mt-4"
+          className="z-10 flex flex-col items-center text-center px-4 pointer-events-none"
         >
-          {/* Text Content */}
-          <motion.div
+          <motion.h1
             variants={itemVariants}
-            className="flex-1 flex flex-col items-center md:items-start text-center md:text-left z-10 w-full"
+            className="mb-2 flex flex-col items-center drop-shadow-sm"
           >
-            <motion.h1
-              variants={itemVariants}
-              className="mb-4 flex flex-col items-center md:items-start text-center md:text-left"
-            >
-              <span className="text-3xl sm:text-4xl md:text-5xl tracking-tight font-light text-foreground/70 mb-2">
-                Welcome back,
-              </span>
-              <span className="text-6xl sm:text-7xl md:text-[5rem] lg:text-[5.5rem] tracking-tight font-medium bg-linear-to-r from-primary via-fuchsia-500 to-secondary bg-clip-text text-transparent drop-shadow-md pb-2 leading-[1.1]">
-                {user?.name?.split(" ")[0] || "User"}
-              </span>
-            </motion.h1>
-            <motion.p
-              variants={itemVariants}
-              className="text-lg md:text-xl text-muted font-light max-w-lg"
-            >
-              How can I assist you today? Let's build, learn, or explore
-              something new together.
-            </motion.p>
-          </motion.div>
+            <span className="text-xl sm:text-2xl md:text-3xl tracking-tight font-light text-foreground/70 mb-1">
+              Welcome back,
+            </span>
+            <span className="text-4xl sm:text-5xl md:text-6xl tracking-tight font-medium bg-linear-to-r from-primary via-fuchsia-500 to-secondary bg-clip-text text-transparent drop-shadow-md pb-2 leading-[1.1]">
+              {user?.name?.split(" ")[0] || "User"}
+            </span>
+          </motion.h1>
+          <motion.p
+            variants={itemVariants}
+            className="text-sm sm:text-base md:text-lg text-muted font-light max-w-md drop-shadow-sm"
+          >
+            How can I assist you today? Let&apos;s build, learn, or explore something
+            new together.
+          </motion.p>
+        </motion.div>
 
-          {/* 3D Model Container */}
-          <motion.div
-            variants={itemVariants}
-            className="flex-1 w-full h-[350px] sm:h-[400px] md:h-[500px] flex items-center justify-center relative"
-          >
-            <div className="w-full h-full relative z-10">
-              <Spline scene="https://prod.spline.design/xs2Dml6OGh6O27TY/scene.splinecode" />
-            </div>
-          </motion.div>
+        {/* 3D Model Container - Full Width/Height for global tracking */}
+        <motion.div
+          variants={itemVariants}
+          className="absolute inset-0 z-10 pointer-events-auto overflow-hidden"
+        >
+          {/* Expanding the container to hide the watermark and create the peek:
+            -bottom-20 pushes the bottom edge down by 5rem, clipping the Spline watermark out of view.
+            -left-10 and -right-10 keep the model perfectly centered.
+            top-[10%] to top-[25%] shifts the model downward depending on screen size. 
+          */}
+          <div className="absolute top-[10%] sm:top-[15%] md:top-[25%] -left-10 -right-10 -bottom-20 flex items-end justify-center">
+            <Spline
+              scene="https://prod.spline.design/xs2Dml6OGh6O27TY/scene.splinecode"
+              className="w-full h-full"
+            />
+          </div>
         </motion.div>
       </div>
     );
@@ -176,12 +180,28 @@ export default function ChatArea() {
                       {msg.content.startsWith("[ATTACHED_PDF: ") ? (
                         <>
                           <div className="flex items-center gap-2 bg-white/20 w-fit px-3 py-2 rounded-lg text-sm font-medium shadow-sm border border-white/10">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M209.66,122.34a8,8,0,0,1,0,11.32l-82.05,82a56,56,0,0,1-79.2-79.21L147.67,35.73a40,40,0,1,1,56.61,56.55L105,193A24,24,0,1,1,71,159l93.66-94.31a8,8,0,0,1,11.34,11.29L82.34,170.31a8,8,0,1,0,11.3,11.34l99.33-100.67a24,24,0,0,0-34-33.91L59.66,147.74a40,40,0,1,0,56.6,56.62l82.06-82A8,8,0,0,1,209.66,122.34Z"></path></svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              fill="currentColor"
+                              viewBox="0 0 256 256"
+                            >
+                              <path d="M209.66,122.34a8,8,0,0,1,0,11.32l-82.05,82a56,56,0,0,1-79.2-79.21L147.67,35.73a40,40,0,1,1,56.61,56.55L105,193A24,24,0,1,1,71,159l93.66-94.31a8,8,0,0,1,11.34,11.29L82.34,170.31a8,8,0,1,0,11.3,11.34l99.33-100.67a24,24,0,0,0-34-33.91L59.66,147.74a40,40,0,1,0,56.6,56.62l82.06-82A8,8,0,0,1,209.66,122.34Z"></path>
+                            </svg>
                             <span className="truncate max-w-[200px] md:max-w-[300px]">
-                              {msg.content.match(/\[ATTACHED_PDF:\s*(.*?)\]/)?.[1]}
+                              {
+                                msg.content.match(
+                                  /\[ATTACHED_PDF:\s*(.*?)\]/,
+                                )?.[1]
+                              }
                             </span>
                           </div>
-                          <div>{msg.content.replace(/\[ATTACHED_PDF:\s*.*?\][\s\r\n]*/, '').trim()}</div>
+                          <div>
+                            {msg.content
+                              .replace(/\[ATTACHED_PDF:\s*.*?\][\s\r\n]*/, "")
+                              .trim()}
+                          </div>
                         </>
                       ) : (
                         msg.content
@@ -362,8 +382,10 @@ export default function ChatArea() {
                 {isUser && (
                   <div className="w-8 h-8 rounded-xl bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shrink-0 mt-1 overflow-hidden shadow-sm">
                     {user?.profilePicture ? (
-                      <img
+                      <Image
                         src={user.profilePicture}
+                        width={32}
+                        height={32}
                         alt="User"
                         className="w-full h-full object-cover"
                       />

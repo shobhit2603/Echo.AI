@@ -21,7 +21,9 @@ export default function Home() {
       {/* Right Section: Chat Interface */}
       <div className="flex-1 min-w-0 flex flex-col relative">
         <ChatArea />
-        <div className="shrink-0 bg-background/80 backdrop-blur-md pt-4">
+        
+        {/* Added z-20, relative positioning, and an inverted shadow to enhance the 3D peeking effect */}
+        <div className="shrink-0 bg-background/80 backdrop-blur-md pt-4 relative z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
           <ChatInput />
         </div>
       </div>

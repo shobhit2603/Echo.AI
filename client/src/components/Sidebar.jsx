@@ -19,6 +19,7 @@ import useAuth from "@/features/auth/useAuth";
 import useChat from "@/features/chats/useChat";
 import { useTheme } from "./ThemeProvider";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
@@ -37,9 +38,14 @@ export default function Sidebar() {
 
   // Close sidebar by default on mobile
   useEffect(() => {
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setIsOpen(false);
-    }
+    const checkMobile = () => {
+      if (window.innerWidth < 768) {
+        setIsOpen(false);
+      }
+    };
+    // Defer state update to avoid synchronous React Compiler warning
+    const timer = setTimeout(checkMobile, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -233,8 +239,10 @@ export default function Sidebar() {
             <div className="flex items-center justify-between p-3 bg-background rounded-xl border border-card-border">
               <div className="flex items-center gap-3 overflow-hidden">
                 {user?.profilePicture ? (
-                  <img
+                  <Image
                     src={user.profilePicture}
+                    width={32}
+                    height={32}
                     alt={user.name}
                     className="w-8 h-8 rounded-full bg-zinc-200 shrink-0"
                   />

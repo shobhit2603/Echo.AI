@@ -12,9 +12,13 @@ export function ThemeProvider({ children }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("theme") || "system";
-    setThemeState(savedTheme);
+    const initializeTheme = () => {
+      setMounted(true);
+      const savedTheme = localStorage.getItem("theme") || "system";
+      setThemeState(savedTheme);
+    };
+    const timer = setTimeout(initializeTheme, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
