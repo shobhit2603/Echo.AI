@@ -4,14 +4,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ShootingStarIcon,
-  ChatCircleIcon,
   SignOutIcon,
   SunIcon,
   MoonIcon,
   DesktopIcon,
   TrashIcon,
   PlusIcon,
-  ListIcon,
+  SidebarSimpleIcon,
   DotsThreeIcon,
   PushPinIcon,
 } from "@phosphor-icons/react";
@@ -107,7 +106,7 @@ export default function Sidebar() {
               className="p-2 text-muted hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-xl transition-colors shrink-0 cursor-pointer"
               title="Close Sidebar"
             >
-              <ListIcon weight="bold" className="w-5 h-5" />
+              <SidebarSimpleIcon weight="bold" className="w-5 h-5" />
             </button>
           </div>
 
@@ -296,7 +295,7 @@ export default function Sidebar() {
             className="absolute top-[calc(max(env(safe-area-inset-top),16px))] left-4 md:top-5 z-50 p-2.5 bg-card rounded-xl shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-muted hover:text-foreground cursor-pointer"
             title="Open Sidebar"
           >
-            <ListIcon weight="bold" className="w-5 h-5" />
+            <SidebarSimpleIcon weight="bold" className="w-5 h-5" />
           </motion.button>
         )}
       </AnimatePresence>
