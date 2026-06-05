@@ -23,7 +23,7 @@ export default function Home() {
         <ChatArea />
         
         {/* Added z-20, relative positioning, and an inverted shadow to enhance the 3D peeking effect */}
-        <div className="shrink-0 bg-background/80 backdrop-blur-md pt-4 relative z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+        <div className="shrink-0  pt-4 relative z-20 ">
           <ChatInput />
         </div>
       </div>
