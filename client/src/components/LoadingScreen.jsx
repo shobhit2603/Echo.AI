@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Sparkle } from "@phosphor-icons/react";
+import { ShootingStarIcon } from "@phosphor-icons/react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -58,7 +58,7 @@ export default function LoadingScreen() {
                 ease: "easeInOut"
               }}
             >
-              <Sparkle weight="fill" className="h-8 w-8" />
+              <ShootingStarIcon weight="fill" className="h-8 w-8" />
             </motion.div>
           </div>
         </motion.div>

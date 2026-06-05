@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ArrowUp, CircleNotch, Paperclip, X } from "@phosphor-icons/react";
+import { ArrowUpIcon, CircleNotchIcon, PaperclipIcon, XIcon } from "@phosphor-icons/react";
 import useChat from "@/features/chats/useChat";
 import { motion } from "motion/react";
 
@@ -61,14 +61,14 @@ export default function ChatInput() {
     <div className="w-full max-w-3xl mx-auto px-4 md:px-6 pb-[calc(max(env(safe-area-inset-bottom),24px))] md:pb-8">
       {selectedFile && (
         <div className="mb-2 flex items-center gap-2 bg-zinc-200/80 dark:bg-zinc-800/80 w-fit px-3 py-1.5 rounded-full text-sm text-foreground shadow-sm">
-          <Paperclip className="w-4 h-4 text-primary" />
+          <PaperclipIcon className="w-4 h-4 text-primary" />
           <span className="truncate max-w-[200px]">{selectedFile.name}</span>
           <button 
             onClick={clearFile}
             className="ml-1 p-0.5 hover:bg-zinc-300 dark:hover:bg-zinc-700 rounded-full transition-colors"
             disabled={isStreaming}
           >
-            <X className="w-3.5 h-3.5" />
+            <XIcon className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
@@ -89,7 +89,7 @@ export default function ChatInput() {
             className="flex items-center justify-center w-10 h-10 rounded-full transition-all text-muted hover:text-foreground hover:bg-zinc-300/50 dark:hover:bg-zinc-700/50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             title="Attach PDF"
           >
-            <Paperclip className="w-5 h-5" />
+            <PaperclipIcon className="w-5 h-5" />
           </button>
         </div>
 
@@ -116,9 +116,9 @@ export default function ChatInput() {
               }`}
           >
             {isStreaming ? (
-              <CircleNotch weight="bold" className="w-5 h-5 animate-spin" />
+              <CircleNotchIcon weight="bold" className="w-5 h-5 animate-spin" />
             ) : (
-              <ArrowUp weight="bold" className="w-5 h-5" />
+              <ArrowUpIcon weight="bold" className="w-5 h-5" />
             )}
           </motion.button>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { GoogleLogo, Sparkle } from "@phosphor-icons/react";
+import { GoogleLogoIcon, ShootingStarIcon } from "@phosphor-icons/react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -42,7 +42,7 @@ export default function AuthPage() {
           className="flex items-center gap-2.5 mb-10"
         >
           <div className="p-2 bg-primary/10 rounded-xl text-primary backdrop-blur-md">
-            <Sparkle weight="fill" className="h-5 w-5" />
+            <ShootingStarIcon weight="fill" className="h-5 w-5" />
           </div>
           <span className="text-lg tracking-wider font-semibold text-foreground uppercase">
             Echo.AI
@@ -67,7 +67,7 @@ export default function AuthPage() {
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-3 bg-foreground text-background font-medium py-4 px-6 rounded-2xl shadow-xl shadow-foreground/5 transition-all hover:opacity-95 cursor-pointer text-sm tracking-wide"
           >
-            <GoogleLogo weight="bold" className="h-5 w-5" />
+            <GoogleLogoIcon weight="bold" className="h-5 w-5" />
             <span>Continue with Google</span>
           </motion.button>
         </motion.div>

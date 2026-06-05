@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from "motion/react";
-import { ShootingStarIcon, User as UserIcon, SpeakerHigh, StopCircle } from "@phosphor-icons/react";
+import { ShootingStarIcon, UserIcon, SpeakerHighIcon, StopCircleIcon } from "@phosphor-icons/react";
 import Image from "next/image";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { speakText, stopSpeech } from "../../utils/SpeechUtils";
@@ -98,12 +98,12 @@ export default function ChatMessage({ msg, user, isStreaming, isLastMessage }) {
                     >
                       {isSpeaking ? (
                         <>
-                          <StopCircle size={16} weight="fill" className="text-primary animate-pulse" />
+                          <StopCircleIcon size={16} weight="fill" className="text-primary animate-pulse" />
                           <span className="text-primary">Stop Speaking</span>
                         </>
                       ) : (
                         <>
-                          <SpeakerHigh size={16} weight="bold" />
+                          <SpeakerHighIcon size={16} weight="bold" />
                           <span>Listen AI Response</span>
                         </>
                       )}
