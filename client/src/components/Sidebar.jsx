@@ -4,16 +4,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ShootingStarIcon,
-  ChatCircle,
-  SignOut,
-  Sun,
-  Moon,
-  Desktop,
-  Trash,
-  Plus,
-  List,
-  DotsThree,
-  PushPin,
+  ChatCircleIcon,
+  SignOutIcon,
+  SunIcon,
+  MoonIcon,
+  DesktopIcon,
+  TrashIcon,
+  PlusIcon,
+  ListIcon,
+  DotsThreeIcon,
+  PushPinIcon,
 } from "@phosphor-icons/react";
 import useAuth from "@/features/auth/useAuth";
 import useChat from "@/features/chats/useChat";
@@ -93,14 +93,14 @@ export default function Sidebar() {
                   Echo.AI
                 </span>
               </div>
-              <Plus weight="bold" className="text-muted w-4 h-4" />
+              <PlusIcon weight="bold" className="text-muted w-4 h-4" />
             </button>
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 text-muted hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-xl transition-colors shrink-0 cursor-pointer"
               title="Close Sidebar"
             >
-              <List weight="bold" className="w-5 h-5" />
+              <ListIcon weight="bold" className="w-5 h-5" />
             </button>
           </div>
 
@@ -120,7 +120,7 @@ export default function Sidebar() {
                   key={chat._id}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className={`group flex items-center justify-between p-3 rounded-xl cursor-pointer transition-colors ${currentChat?._id === chat._id
+                  className={`group flex items-center justify-between px-3 py-2 rounded-xl cursor-pointer transition-colors ${currentChat?._id === chat._id
                     ? "bg-primary/10 text-primary"
                     : "hover:bg-zinc-100 dark:hover:bg-zinc-800/50 text-muted hover:text-foreground"
                     }`}
@@ -130,13 +130,9 @@ export default function Sidebar() {
                   }}
                 >
                   <div className="flex items-center gap-3 overflow-hidden">
-                    <ChatCircle
-                      weight={currentChat?._id === chat._id ? "fill" : "regular"}
-                      className="w-5 h-5 shrink-0"
-                    />
                     <div className="flex items-center gap-1.5 overflow-hidden">
                       {chat.isPinned && (
-                        <PushPin weight="fill" className="w-3.5 h-3.5 shrink-0 text-amber-500" />
+                        <PushPinIcon weight="fill" className="w-3.5 h-3.5 shrink-0 text-primary" />
                       )}
                       <span className="text-sm truncate font-medium">
                         {chat.title}
@@ -154,7 +150,7 @@ export default function Sidebar() {
                       className="opacity-100 md:opacity-0 md:group-hover:opacity-100 p-1 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 rounded transition-all cursor-pointer"
                       title="Options"
                     >
-                      <DotsThree weight="bold" className="w-5 h-5 text-muted hover:text-foreground" />
+                      <DotsThreeIcon weight="bold" className="w-5 h-5 text-muted hover:text-foreground" />
                     </button>
 
                     {/* Dropdown Menu */}
@@ -177,7 +173,7 @@ export default function Sidebar() {
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors text-left"
                           >
-                            <PushPin className="w-4 h-4 text-muted" />
+                            <PushPinIcon className="w-4 h-4 text-muted" />
                             {chat.isPinned ? "Unpin Chat" : "Pin to Top"}
                           </button>
                           <button
@@ -188,7 +184,7 @@ export default function Sidebar() {
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors text-left"
                           >
-                            <Trash className="w-4 h-4" />
+                            <TrashIcon className="w-4 h-4" />
                             Delete Chat
                           </button>
                         </motion.div>
@@ -212,7 +208,7 @@ export default function Sidebar() {
                   }`}
                 title="Light Mode"
               >
-                <Sun weight="duotone" className="w-4 h-4" />
+                <SunIcon weight="duotone" className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setTheme("system")}
@@ -222,7 +218,7 @@ export default function Sidebar() {
                   }`}
                 title="System Theme"
               >
-                <Desktop weight="duotone" className="w-4 h-4" />
+                <DesktopIcon weight="duotone" className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setTheme("dark")}
@@ -232,7 +228,7 @@ export default function Sidebar() {
                   }`}
                 title="Dark Mode"
               >
-                <Moon weight="duotone" className="w-4 h-4" />
+                <MoonIcon weight="duotone" className="w-4 h-4" />
               </button>
             </div>
 
@@ -260,7 +256,7 @@ export default function Sidebar() {
                 className="p-2 text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors shrink-0 cursor-pointer"
                 title="Logout"
               >
-                <SignOut weight="bold" className="w-5 h-5" />
+                <SignOutIcon weight="bold" className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -278,7 +274,7 @@ export default function Sidebar() {
             className="absolute top-[calc(max(env(safe-area-inset-top),16px))] left-4 md:top-5 z-50 p-2.5 bg-card border border-card-border rounded-xl shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-muted hover:text-foreground cursor-pointer"
             title="Open Sidebar"
           >
-            <List weight="bold" className="w-5 h-5" />
+            <ListIcon weight="bold" className="w-5 h-5" />
           </motion.button>
         )}
       </AnimatePresence>

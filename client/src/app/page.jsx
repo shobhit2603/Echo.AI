@@ -22,7 +22,7 @@ export default function Home() {
       <div className="flex-1 min-w-0 flex flex-col relative">
         <ChatArea />
         
-        {/* Added z-20, relative positioning, and an inverted shadow to enhance the 3D peeking effect */}
+        {/* Added z-20, relative positioning */}
         <div className="shrink-0  pt-4 relative z-20 ">
           <ChatInput />
         </div>
