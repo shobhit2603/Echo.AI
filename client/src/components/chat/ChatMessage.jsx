@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from "motion/react";
-import { ShootingStarIcon, User as UserIcon } from "@phosphor-icons/react";
+import { ShootingStarIcon, User as UserIcon, SpeakerHigh, StopCircle } from "@phosphor-icons/react";
 import Image from "next/image";
 import MarkdownRenderer from "./MarkdownRenderer";
+import { speakText, stopSpeech } from "../../utils/SpeechUtils";
 
 export default function ChatMessage({ msg, user, isStreaming, isLastMessage }) {
   const isUser = msg.role === "user";
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const handleSpeechToggle = () => {
+    if (isSpeaking) {
+      stopSpeech();
+      setIsSpeaking(false);
+    } else {
+      setIsSpeaking(true);
+      speakText(msg.content, () => setIsSpeaking(false));
+    }
+  };
 
   return (
     <motion.div
@@ -76,6 +88,27 @@ export default function ChatMessage({ msg, user, isStreaming, isLastMessage }) {
                 {/* Blinking cursor while AI is still streaming */}
                 {isStreaming && isLastMessage && (
                   <span className="inline-block w-0.75 h-[1.1em] bg-primary/70 rounded-full ml-0.5 align-middle animate-pulse" />
+                )}
+                {!isStreaming && msg.content && (
+                  <div className="flex justify-start mt-2">
+                    <button
+                      onClick={handleSpeechToggle}
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-zinc-500 hover:text-primary transition-colors rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                      title={isSpeaking ? "Stop speaking" : "Read aloud"}
+                    >
+                      {isSpeaking ? (
+                        <>
+                          <StopCircle size={16} weight="fill" className="text-primary animate-pulse" />
+                          <span className="text-primary">Stop Speaking</span>
+                        </>
+                      ) : (
+                        <>
+                          <SpeakerHigh size={16} weight="bold" />
+                          <span>Listen AI Response</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 )}
               </>
             )}
