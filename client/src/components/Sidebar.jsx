@@ -63,6 +63,7 @@ export default function Sidebar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.3 }}
             onClick={() => setIsOpen(false)}
             className="md:hidden fixed inset-0 bg-black/40 z-30 backdrop-blur-sm"
           />
@@ -75,8 +76,8 @@ export default function Sidebar() {
           width: isOpen ? 320 : 0,
           opacity: isOpen ? 1 : 0,
         }}
-        transition={{ type: "spring", stiffness: 250, damping: 25 }}
-        className="h-full bg-card flex flex-col shrink-0 overflow-hidden absolute md:relative z-40 left-0 top-0 bottom-0 shadow-2xl md:shadow-none"
+        transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.3 }}
+        className="h-full bg-card flex flex-col shrink-0 overflow-hidden absolute md:relative z-40 left-0 top-0 bottom-0 shadow-2xl md:shadow-none will-change-[width,opacity] transform-gpu"
       >
         <div className="w-[320px] h-full flex flex-col shrink-0">
           {/* Header */}
@@ -290,6 +291,7 @@ export default function Sidebar() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.3 }}
             onClick={() => setIsOpen(true)}
             className="absolute top-[calc(max(env(safe-area-inset-top),16px))] left-4 md:top-5 z-50 p-2.5 bg-card rounded-xl shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-muted hover:text-foreground cursor-pointer"
             title="Open Sidebar"

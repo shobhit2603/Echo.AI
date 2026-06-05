@@ -114,17 +114,17 @@ export default function ChatArea() {
           </motion.p>
         </motion.div>
 
-        {/* 3D Model Container - Full Width/Height for global tracking */}
+        {/* 3D Model Container - Fixed width to prevent WebGL resize lag */}
         <motion.div
           variants={itemVariants}
           className="absolute inset-0 z-10 pointer-events-auto overflow-hidden"
         >
-          {/* Expanding the container to hide the watermark and create the peek:
-            -bottom-20 pushes the bottom edge down by 5rem, clipping the Spline watermark out of view.
-            -left-10 and -right-10 keep the model perfectly centered.
-            top-[10%] to top-[25%] shifts the model downward depending on screen size. 
+          {/* 
+            Using w-[100vw] and left-1/2 -translate-x-1/2 ensures the WebGL canvas 
+            maintains a constant size when the sidebar opens/closes.
+            This completely eliminates the WebGL resize lag.
           */}
-          <div className="absolute top-[10%] sm:top-[15%] md:top-[25%] -left-10 -right-10 -bottom-20 flex items-end justify-center">
+          <div className="absolute top-[10%] sm:top-[15%] md:top-[25%] left-1/2 -translate-x-1/2 w-screen -bottom-20 flex items-end justify-center transform-gpu">
             <Spline
               scene="https://prod.spline.design/xs2Dml6OGh6O27TY/scene.splinecode"
               className="w-full h-full"
