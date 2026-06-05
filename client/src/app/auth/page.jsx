@@ -22,17 +22,17 @@ const itemVariants = {
 
 export default function AuthPage() {
   const handleGoogleLogin = () => {
-    const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
+    const API_URL =
+      process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
     window.location.href = `${API_URL}/api/auth/google`;
   };
 
   return (
     <main className="relative min-h-screen w-full bg-background flex flex-col items-center justify-center overflow-hidden p-6">
-      
       {/* Premium Floating Ambient Gradients */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         {/* Animated Orb 1 */}
-        <motion.div 
+        <motion.div
           animate={{
             x: [0, 40, -20, 0],
             y: [0, -60, 40, 0],
@@ -40,13 +40,13 @@ export default function AuthPage() {
           transition={{
             duration: 12,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
-          className="absolute top-[20%] left-[15%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] bg-violet-500/20 dark:bg-violet-500/20 rounded-full blur-[80px] md:blur-[130px]" 
+          className="absolute top-[20%] left-[15%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] bg-violet-500/20 dark:bg-violet-500/20 rounded-full blur-[80px] md:blur-[130px]"
         />
-        
+
         {/* Animated Orb 2 */}
-        <motion.div 
+        <motion.div
           animate={{
             x: [0, -50, 30, 0],
             y: [0, 50, -30, 0],
@@ -55,9 +55,9 @@ export default function AuthPage() {
             duration: 15,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 1
+            delay: 1,
           }}
-          className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] bg-cyan-500/15 dark:bg-cyan-500/20 rounded-full blur-[90px] md:blur-[150px]" 
+          className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] bg-cyan-500/15 dark:bg-cyan-500/20 rounded-full blur-[90px] md:blur-[150px]"
         />
 
         {/* Minimal Grid Overlay */}
@@ -72,7 +72,7 @@ export default function AuthPage() {
         className="relative z-10 w-full max-w-[400px] flex flex-col items-center text-center px-4"
       >
         {/* Brand App Logo */}
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           className="flex items-center gap-2.5 mb-10"
         >
@@ -108,14 +108,25 @@ export default function AuthPage() {
         </motion.div>
 
         {/* Subtle Bottom Links */}
-        <motion.p 
+        <motion.p
           variants={itemVariants}
           className="text-xs text-muted-foreground/50 tracking-normal leading-normal max-w-[280px]"
         >
           By continuing, you agree to our{" "}
-          <a href="#" className="underline underline-offset-4 hover:text-foreground transition-colors">Terms</a>
-          {" "}and{" "}
-          <a href="#" className="underline underline-offset-4 hover:text-foreground transition-colors">Privacy Policy</a>.
+          <a
+            href="#"
+            className="underline underline-offset-4 hover:text-foreground transition-colors"
+          >
+            Terms
+          </a>{" "}
+          and{" "}
+          <a
+            href="#"
+            className="underline underline-offset-4 hover:text-foreground transition-colors"
+          >
+            Privacy Policy
+          </a>
+          .
         </motion.p>
       </motion.div>
     </main>
