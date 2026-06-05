@@ -23,8 +23,14 @@ import Image from "next/image";
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
-  const { sidebarChats, currentChat, loadChat, clearCurrentChat, removeChat, togglePinChat } =
-    useChat();
+  const {
+    sidebarChats,
+    currentChat,
+    loadChat,
+    clearCurrentChat,
+    removeChat,
+    togglePinChat,
+  } = useChat();
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -70,17 +76,17 @@ export default function Sidebar() {
           opacity: isOpen ? 1 : 0,
         }}
         transition={{ type: "spring", stiffness: 250, damping: 25 }}
-        className="h-full bg-card border-r border-card-border flex flex-col shrink-0 overflow-hidden absolute md:relative z-40 left-0 top-0 bottom-0 shadow-2xl md:shadow-none"
+        className="h-full bg-card flex flex-col shrink-0 overflow-hidden absolute md:relative z-40 left-0 top-0 bottom-0 shadow-2xl md:shadow-none"
       >
         <div className="w-[320px] h-full flex flex-col shrink-0">
           {/* Header */}
-          <div className="p-4 pt-[calc(max(env(safe-area-inset-top),16px))] border-b border-card-border flex items-center justify-between">
+          <div className="p-4 pt-[calc(max(env(safe-area-inset-top),16px))] flex items-center justify-between">
             <button
               onClick={() => {
                 clearCurrentChat();
                 if (window.innerWidth < 768) setIsOpen(false);
               }}
-              className="flex-1 flex items-center justify-between p-3 bg-background hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-xl transition-colors group mr-2 cursor-pointer"
+              className="flex-1 flex items-center justify-between p-2 bg-background hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-xl transition-colors group mr-2 cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary rounded-lg group-hover:scale-105 transition-transform">
@@ -120,10 +126,11 @@ export default function Sidebar() {
                   key={chat._id}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className={`group flex items-center justify-between px-3 py-2 rounded-xl cursor-pointer transition-colors ${currentChat?._id === chat._id
-                    ? "bg-primary/10 text-primary"
-                    : "hover:bg-zinc-100 dark:hover:bg-zinc-800/50 text-muted hover:text-foreground"
-                    }`}
+                  className={`group flex items-center justify-between px-3 py-1 rounded-xl cursor-pointer transition-colors ${
+                    currentChat?._id === chat._id
+                      ? "bg-primary/10 text-primary"
+                      : "hover:bg-zinc-100 dark:hover:bg-zinc-800/50 text-muted hover:text-foreground"
+                  }`}
                   onClick={() => {
                     loadChat(chat._id);
                     if (window.innerWidth < 768) setIsOpen(false);
@@ -132,7 +139,10 @@ export default function Sidebar() {
                   <div className="flex items-center gap-3 overflow-hidden">
                     <div className="flex items-center gap-1.5 overflow-hidden">
                       {chat.isPinned && (
-                        <PushPinIcon weight="fill" className="w-3.5 h-3.5 shrink-0 text-primary" />
+                        <PushPinIcon
+                          weight="fill"
+                          className="w-3.5 h-3.5 shrink-0 text-primary"
+                        />
                       )}
                       <span className="text-sm truncate font-medium">
                         {chat.title}
@@ -145,12 +155,17 @@ export default function Sidebar() {
                         e.preventDefault();
                         e.stopPropagation();
                         e.nativeEvent.stopImmediatePropagation();
-                        setActiveDropdown(activeDropdown === chat._id ? null : chat._id);
+                        setActiveDropdown(
+                          activeDropdown === chat._id ? null : chat._id,
+                        );
                       }}
                       className="opacity-100 md:opacity-0 md:group-hover:opacity-100 p-1 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 rounded transition-all cursor-pointer"
                       title="Options"
                     >
-                      <DotsThreeIcon weight="bold" className="w-5 h-5 text-muted hover:text-foreground" />
+                      <DotsThreeIcon
+                        weight="bold"
+                        className="w-5 h-5 text-muted hover:text-foreground"
+                      />
                     </button>
 
                     {/* Dropdown Menu */}
@@ -161,10 +176,12 @@ export default function Sidebar() {
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95, y: -5 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute right-0 top-full mt-1 w-40 bg-card border border-card-border rounded-xl shadow-lg overflow-hidden z-50 py-1" onClick={(e) => {
+                          className="absolute right-0 top-full mt-1 w-40 bg-card border border-card-border rounded-xl shadow-lg overflow-hidden z-50 py-1"
+                          onClick={(e) => {
                             e.stopPropagation();
                             e.nativeEvent.stopImmediatePropagation();
-                          }}                        >
+                          }}
+                        >
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -197,42 +214,45 @@ export default function Sidebar() {
           </div>
 
           {/* Footer */}
-          <div className="p-4 pb-[calc(max(env(safe-area-inset-bottom),16px))] border-t border-card-border flex flex-col gap-3 shrink-0">
+          <div className="p-4 pb-[calc(max(env(safe-area-inset-bottom),16px))] flex flex-col gap-3 shrink-0">
             {/* Theme Selector */}
-            <div className="flex items-center justify-between p-1 bg-background rounded-xl border border-card-border shadow-sm">
+            <div className="flex items-center justify-between p-1 bg-background rounded-xl shadow-sm">
               <button
                 onClick={() => setTheme("light")}
-                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all cursor-pointer ${theme === "light"
-                  ? "bg-card shadow-sm text-amber-500 border border-card-border"
-                  : "text-muted hover:text-foreground border border-transparent"
-                  }`}
+                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all cursor-pointer ${
+                  theme === "light"
+                    ? "bg-card shadow-sm text-amber-500"
+                    : "text-muted hover:text-foreground"
+                }`}
                 title="Light Mode"
               >
                 <SunIcon weight="duotone" className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setTheme("system")}
-                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all mx-1 cursor-pointer ${theme === "system"
-                  ? "bg-card shadow-sm text-foreground border border-card-border"
-                  : "text-muted hover:text-foreground border border-transparent"
-                  }`}
+                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all mx-1 cursor-pointer ${
+                  theme === "system"
+                    ? "bg-card shadow-sm text-foreground"
+                    : "text-muted hover:text-foreground"
+                }`}
                 title="System Theme"
               >
                 <DesktopIcon weight="duotone" className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setTheme("dark")}
-                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all cursor-pointer ${theme === "dark"
-                  ? "bg-card shadow-sm text-blue-400 border border-card-border"
-                  : "text-muted hover:text-foreground border border-transparent"
-                  }`}
+                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all cursor-pointer ${
+                  theme === "dark"
+                    ? "bg-card shadow-sm text-blue-400"
+                    : "text-muted hover:text-foreground"
+                }`}
                 title="Dark Mode"
               >
                 <MoonIcon weight="duotone" className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-background rounded-xl border border-card-border">
+            <div className="flex items-center justify-between p-3 bg-background rounded-xl">
               <div className="flex items-center gap-3 overflow-hidden">
                 {user?.profilePicture ? (
                   <Image
@@ -271,7 +291,7 @@ export default function Sidebar() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => setIsOpen(true)}
-            className="absolute top-[calc(max(env(safe-area-inset-top),16px))] left-4 md:top-5 z-50 p-2.5 bg-card border border-card-border rounded-xl shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-muted hover:text-foreground cursor-pointer"
+            className="absolute top-[calc(max(env(safe-area-inset-top),16px))] left-4 md:top-5 z-50 p-2.5 bg-card rounded-xl shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-muted hover:text-foreground cursor-pointer"
             title="Open Sidebar"
           >
             <ListIcon weight="bold" className="w-5 h-5" />
