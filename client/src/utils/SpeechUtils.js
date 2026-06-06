@@ -9,8 +9,8 @@ export const speakText = (text, onEnd) => {
       utterance.onerror = onEnd;
     }
     
-    utterance.rate = 1.5; 
-    utterance.pitch = 1.5; 
+    utterance.rate = 1.0; 
+    utterance.pitch = 1.0; 
     
     const voices = window.speechSynthesis.getVoices();
     
