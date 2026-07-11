@@ -11,13 +11,24 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
+  themeColor: "#09090b",
 };
 
 export const metadata = {
   title: "Echo.AI",
   description: "Your Personal AI Assistant - Learn, Create, and Explore",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Echo.AI",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
     icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
 };
 
