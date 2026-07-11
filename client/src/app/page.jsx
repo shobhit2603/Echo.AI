@@ -19,14 +19,14 @@ export default function Home() {
       <Sidebar />
 
       {/* Right Section: Chat Interface */}
-      <div className="flex-1 min-w-0 flex flex-col relative">
+      <main className="flex-1 min-w-0 flex flex-col relative">
         <ChatArea />
         
         {/* Added z-20, relative positioning */}
         <div className="shrink-0  pt-4 relative z-20 ">
           <ChatInput />
         </div>
-      </div>
+      </main>
     </div>
   );
 }

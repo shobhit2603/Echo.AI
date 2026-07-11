@@ -56,7 +56,7 @@ export default function ChatArea() {
   }
 
   // Empty State (New Chat)
-  if (!currentChat || currentChat.messages.length === 0) {
+  if (!currentChat) {
     return <WelcomeScreen />;
   }
 
@@ -70,7 +70,7 @@ export default function ChatArea() {
         className="flex-1 overflow-y-auto p-4 md:p-8 pt-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         <div className="max-w-4xl mx-auto space-y-6 pb-4">
-          {currentChat.messages.map((msg, index) => (
+          {currentChat.messages?.map((msg, index) => (
             <ChatMessage
               key={index}
               msg={msg}

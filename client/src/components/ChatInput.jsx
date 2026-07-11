@@ -67,6 +67,7 @@ export default function ChatInput() {
             onClick={clearFile}
             className="ml-1 p-0.5 hover:bg-zinc-300 dark:hover:bg-zinc-700 rounded-full transition-colors"
             disabled={isStreaming}
+            aria-label="Clear file"
           >
             <XIcon className="w-3.5 h-3.5" />
           </button>
@@ -88,6 +89,7 @@ export default function ChatInput() {
             disabled={isStreaming}
             className="flex items-center justify-center w-10 h-10 rounded-full transition-all text-muted hover:text-foreground hover:bg-zinc-300/50 dark:hover:bg-zinc-700/50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             title="Attach PDF"
+            aria-label="Attach PDF"
           >
             <PaperclipIcon className="w-5 h-5" />
           </button>
@@ -110,6 +112,7 @@ export default function ChatInput() {
             whileTap={{ scale: 0.95 }}
             onClick={handleSubmit}
             disabled={(!content.trim() && !selectedFile) || isStreaming}
+            aria-label="Send message"
             className={`flex items-center justify-center w-10 h-10 rounded-full transition-all ${((content.trim() || selectedFile) && !isStreaming)
                 ? "bg-foreground text-background shadow-md cursor-pointer"
                 : "bg-zinc-200 dark:bg-zinc-700 text-muted opacity-50 cursor-not-allowed"
