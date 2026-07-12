@@ -39,6 +39,10 @@ The application leverages a modular, **feature-based architecture** separating c
 - 📌 **Chat Management** — Create, delete, and pin chats to keep important conversations accessible in the sidebar.
 - 📁 **Conversational Memory** — Session-based chat history that maintains context across consecutive user queries.
 - 📦 **Containerized Workspace** — Built with local Docker orchestration support for single-command environment setups.
+- 🚀 **Progressive Web App (PWA)** — Fully installable on mobile and desktop devices for a native app-like experience.
+- 🛡️ **Enterprise-Grade Security** — Implements Helmet for HTTP security headers and robust rate-limiting to prevent brute-force attacks.
+- 📊 **Production-Ready Logging** — Centralized Winston JSON logging and global error handling middleware for monitoring and debugging.
+- 📈 **SEO & Performance Optimized** — Leveraging Next.js App Router for superior Core Web Vitals, dynamic metadata, and lightning-fast asset delivery.
 
 ---
 
