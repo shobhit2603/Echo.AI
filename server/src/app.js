@@ -3,15 +3,21 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import helmet from "helmet";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import authRouter from "./routes/auth.routes.js";
 import chatRouter from "./routes/chat.routes.js";
 import config from "./config/config.js";
+import { apiLimiter, authLimiter } from "./middlewares/rateLimiter.middleware.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 
 const app = express();
 
 // Trust reverse proxy (Railway) for secure cookies
 app.set("trust proxy", 1);
+
+// Apply HTTP security headers
+app.use(helmet());
 
 app.use(morgan("dev"));
 
@@ -49,8 +55,14 @@ passport.use(
   ),
 );
 
+// Apply general API rate limiter
+app.use("/api", apiLimiter);
+
 // Routes
-app.use("/api/auth", authRouter);
+app.use("/api/auth", authLimiter, authRouter);
 app.use("/api/chat", chatRouter);
+
+// Global Error Handler (must be the last middleware)
+app.use(errorHandler);
 
 export default app;
